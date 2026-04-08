@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\TripPlannerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AIController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -19,5 +19,5 @@ Route::controller(AuthController::class)->group(function () {
 
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/trip/plan', [TripPlannerController::class, 'plan']);
+    Route::post('/trip/plan', [AIController::class, 'planTrip']);
 });

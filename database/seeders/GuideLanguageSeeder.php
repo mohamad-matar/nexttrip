@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Guide;
 use Illuminate\Database\Seeder;
 use App\Models\GuideLanguage;
 
@@ -24,7 +25,7 @@ class GuideLanguageSeeder extends Seeder
         ];
 
         foreach ($data as $item) {
-            GuideLanguage::create($item);
+            Guide::find($item['guide_id'])->languages()->attach($item['language_id']);
         }
     }
 }
