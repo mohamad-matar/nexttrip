@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
     'budget_min',
     'budget_max'
 ])]
-class UserPreference extends Model
+class UserInterest extends Model
 {
     protected function casts(): array
     {

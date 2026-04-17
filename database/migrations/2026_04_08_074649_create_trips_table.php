@@ -14,14 +14,18 @@ return new class extends Migration
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('title')->nullable();
+            
+            $table->integer('budget_max')->nullable();            
+            $table->enum('trip_pace', ['بطيء', 'متوسط', 'مكثف'])->default('متوسط');
+            $table->enum('preferred_activity_level', ['خفيف', 'متوسط', 'متعب'])->nullable();
+
 
             $table->integer('days');
-            $table->decimal('budget', 10, 2)->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
 
-            $table->enum('trip_pace', ['بطيء', 'متوسط', 'مكثف'])->default('متوسط');
-
-            $table->json('interests')->nullable();
-            $table->string('weather')->nullable();
+            $table->decimal('total_cost', 10, 2)->nullable();            
 
             $table->timestamps();
         });

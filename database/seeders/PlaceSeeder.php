@@ -14,10 +14,10 @@ class PlaceSeeder extends Seeder
             // دمشق
             [
                 'city_id' => 1,
-                'place_type_id' => 1,
                 'name' => 'الجامع الأموي',
                 'description' => 'أحد أهم المعالم الإسلامية في دمشق القديمة.',
                 'cost' => 0,
+                'price_unit_id' => 4, // مجاناً
                 'duration_minutes' => 60,
                 'activity_level' => 'خفيف',
                 'latitude' => 33.5113,
@@ -26,10 +26,10 @@ class PlaceSeeder extends Seeder
             ],
             [
                 'city_id' => 1,
-                'place_type_id' => 5,
                 'name' => 'سوق الحميدية',
                 'description' => 'أشهر أسواق دمشق القديمة.',
                 'cost' => 0,
+                'price_unit_id' => 4, // مجاناً
                 'duration_minutes' => 90,
                 'activity_level' => 'متوسط',
                 'latitude' => 33.5100,
@@ -38,10 +38,10 @@ class PlaceSeeder extends Seeder
             ],
             [
                 'city_id' => 1,
-                'place_type_id' => 2,
                 'name' => 'مطعم بيت جبري',
                 'description' => 'مطعم تراثي في دمشق القديمة.',
                 'cost' => 20,
+                'price_unit_id' => 1, // ليرة سورية
                 'duration_minutes' => 90,
                 'activity_level' => 'خفيف',
                 'latitude' => 33.5090,
@@ -52,10 +52,10 @@ class PlaceSeeder extends Seeder
             // حلب
             [
                 'city_id' => 2,
-                'place_type_id' => 9,
                 'name' => 'قلعة حلب',
                 'description' => 'من أهم القلاع التاريخية في العالم.',
                 'cost' => 5,
+                'price_unit_id' => 1, // ليرة سورية
                 'duration_minutes' => 120,
                 'activity_level' => 'متعب',
                 'latitude' => 36.1990,
@@ -64,10 +64,10 @@ class PlaceSeeder extends Seeder
             ],
             [
                 'city_id' => 2,
-                'place_type_id' => 5,
                 'name' => 'سوق المدينة',
                 'description' => 'سوق أثري مشهور.',
                 'cost' => 0,
+                'price_unit_id' => 4, // مجاناً
                 'duration_minutes' => 90,
                 'activity_level' => 'متوسط',
                 'latitude' => 36.1980,
@@ -78,10 +78,10 @@ class PlaceSeeder extends Seeder
             // اللاذقية
             [
                 'city_id' => 3,
-                'place_type_id' => 8,
                 'name' => 'الشاطئ الأزرق',
                 'description' => 'شاطئ جميل ومناسب للسباحة.',
                 'cost' => 0,
+                'price_unit_id' => 4, // مجاناً
                 'duration_minutes' => 120,
                 'activity_level' => 'خفيف',
                 'latitude' => 35.5230,

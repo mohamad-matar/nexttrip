@@ -11,20 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('trip_cities', function (Blueprint $table) {
-            $table->foreignId('trip_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('city_id')->constrained()->cascadeOnDelete();
-
-            $table->primary(['trip_id', 'city_id']);
+        Schema::create('price_units', function (Blueprint $table) {
+            $table->id();
+            $table->string('name'); 
         });
     }
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('trip_cities');
+        Schema::dropIfExists('price_units');
     }
 };

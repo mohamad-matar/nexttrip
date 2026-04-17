@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
         /** basic */
         $this->call([
             CitySeeder::class,
-            PlaceTypeSeeder::class,
+            PriceUnitSeeder::class,
+            InterestSeeder::class,
             LanguageSeeder::class
         ]);
 
@@ -27,19 +28,27 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PlaceSeeder::class,
             PlaceImageSeeder::class,
+            InterestPlaceSeeder::class,
         ]);
 
         /** guides */
         $this->call([
             UserSeeder::class,
+            UserInterestSeeder::class,
             GuideSeeder::class,
             GuideLanguageSeeder::class,
             GuideAvailabilitySeeder::class,
         ]);
 
+        /** trips */
+        $this->call([
+            TripSeeder::class,
+            TripCitySeeder::class,
+            TripPlaceSeeder::class,
+        ]);
+
         /** tourists related data */
         $this->call([
-            UserPreferenceSeeder::class,
             ReviewSeeder::class,
         ]);
     }

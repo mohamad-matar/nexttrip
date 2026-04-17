@@ -3,30 +3,32 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Fillable;          
+
 
 #[Fillable([
     'user_id',
     'title',
-    'days',
-    'total_cost',
-    'ai_raw_response'
+    'budget_max','trip_pace','preferred_activity_level',
+    'days','start_date', 'end_date',
+    'total_cost'     
 ])]
+
+
 class Trip extends Model
 {
-    protected function casts(): array
-    {
-        return [
-            'ai_raw_response' => 'array',
-        ];
-    }
 
+protected $casts = [
+    'start_date' => 'date',
+    'end_date' => 'date',
+];
+  
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function places()
+    public function tripPlaces()
     {
         return $this->hasMany(TripPlace::class);
     }

@@ -7,11 +7,12 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password' , 'role'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -23,9 +24,8 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    public function preferences()
-    {
-        return $this->hasOne(UserPreference::class);
+    public function interests(){
+        return $this->belongsToMany(Interest::class);
     }
 
     public function guide()
@@ -41,6 +41,11 @@ class User extends Authenticatable
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function userInterest()
+    {
+        return $this->hasOne(UserInterests::class);
     }
     protected function casts(): array
     {

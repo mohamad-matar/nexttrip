@@ -6,23 +6,33 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+
+
     /**
      * Run the migrations.
      */
     public function up(): void
     {
+
+
         Schema::create('trip_places', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('trip_id')->constrained()->cascadeOnDelete();
             $table->foreignId('place_id')->constrained()->cascadeOnDelete();
-
+            $table->foreignId('city_id')->constrained()->cascadeOnDelete();
+            
+            // الترتيب والزمن
             $table->integer('day_number'); // 1,2,3...
             $table->integer('order')->default(1);
-
-            $table->timestamps();
-
+            $table->time('start_time');
+            $table->integer('duration_minutes'); // مدة النشاط في هذه الرحلة تحديداً
+            $table->integer('travel_time_minutes')->default(0);// وقت الوصول من المكان السابق
+            
+            $table->decimal('estimated_cost', 12, 2)->default(0);
+            
             $table->unique(['trip_id', 'day_number', 'order']);
+            $table->timestamps();
         });
     }
 

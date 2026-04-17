@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 
-#[Fillable(['name'])]
-class PlaceType extends Model
+#[Fillable(['name' , 'question'])]
+class Interest extends Model
 {
     public function places()
     {
-        return $this->hasMany(Place::class);
+        return $this->belongsToMany(Place::class);
     }
 }
