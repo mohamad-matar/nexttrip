@@ -78,7 +78,7 @@ class UserGuideCitySeeder extends Seeder
             // آدمن
             [
                 'name' => 'مدير النظام',
-                'email' => 'admin@nexttrip.com',
+                'email' => 'admin@test.com',
                 'password' => Hash::make('admin123'),
                 'role' => 'admin',
             ],

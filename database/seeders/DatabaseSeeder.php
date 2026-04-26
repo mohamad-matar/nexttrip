@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
             InterestUserSeeder::class,
         ]);
         $this->call([
-            Trip::class, //empty
+            TripSeeder::class, //empty
             TripPlaceSeeder::class, //empty
         ]);
     }
