@@ -43,10 +43,6 @@ class User extends Authenticatable
         return $this->hasMany(Review::class);
     }
 
-    public function userInterest()
-    {
-        return $this->hasOne(UserInterests::class);
-    }
     protected function casts(): array
     {
         return [

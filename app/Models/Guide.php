@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 
 #[Fillable([
-    'user_id',
+    'gender',
+    'phone',
+    'DOB',
+    'avatar',
+    'price_per_day',
     'bio',
-    'price_per_day'
 ])]
 class Guide extends Model
 {
@@ -21,9 +24,8 @@ class Guide extends Model
     {
         return $this->belongsToMany(Language::class);
     }
-
-    public function availability()
+    public function cities()
     {
-        return $this->hasMany(GuideAvailability::class);
-    }
+        return $this->belongsToMany(City::class);
+    }    
 }

@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('guide_availabilities', function (Blueprint $table) {
+        Schema::create('place_reviews', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('guide_id')->constrained()->cascadeOnDelete();
 
-            $table->date('date');
-            $table->boolean('is_available')->default(true);
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('place_id')->constrained()->cascadeOnDelete();
+
+            $table->integer('rating'); // 1–5
+            $table->text('comment')->nullable();
 
             $table->timestamps();
         });
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('guide_availabilities');
+        Schema::dropIfExists('place_reviews');
     }
 };

@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\PlaceReview;
 use Illuminate\Database\Seeder;
-use App\Models\Review;
 
-class ReviewSeeder extends Seeder
+class PlaceReviewSeeder extends Seeder
 {
     public function run(): void
     {
@@ -31,7 +31,7 @@ class ReviewSeeder extends Seeder
         ];
 
         foreach ($reviews as $review) {
-            Review::create($review);
+            PlaceReview::create($review);
         }
     }
 }

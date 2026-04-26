@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -18,26 +19,22 @@ class DatabaseSeeder extends Seeder
 
         /** basic */
         $this->call([
-            CitySeeder::class,
             PriceUnitSeeder::class,
             InterestSeeder::class,
-            LanguageSeeder::class
-        ]);
+            LanguageSeeder::class,
+            TypeSeeder::class
+        ]);        
 
+        /** cities- useres-guides */
+        $this->call([
+            UserGuideCitySeeder::class,
+            GuideLanguageSeeder::class,
+        ]);
         /** places */
         $this->call([
             PlaceSeeder::class,
             PlaceImageSeeder::class,
             InterestPlaceSeeder::class,
-        ]);
-
-        /** guides */
-        $this->call([
-            UserSeeder::class,
-            UserInterestSeeder::class,
-            GuideSeeder::class,
-            GuideLanguageSeeder::class,
-            GuideAvailabilitySeeder::class,
         ]);
 
         /** trips */
@@ -49,7 +46,12 @@ class DatabaseSeeder extends Seeder
 
         /** tourists related data */
         $this->call([
-            ReviewSeeder::class,
+            PlaceReviewSeeder::class,
+            InterestUserSeeder::class,
+        ]);
+        $this->call([
+            Trip::class, //empty
+            TripPlaceSeeder::class, //empty
         ]);
     }
 }

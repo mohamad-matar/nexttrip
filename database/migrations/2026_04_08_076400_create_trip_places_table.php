@@ -19,7 +19,7 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('trip_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('place_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('place_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('city_id')->constrained()->cascadeOnDelete();
             
             // الترتيب والزمن

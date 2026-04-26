@@ -17,13 +17,12 @@ return new class extends Migration
             $table->string('title')->nullable();
             
             $table->integer('budget_max')->nullable();            
-            $table->enum('trip_pace', ['بطيء', 'متوسط', 'مكثف'])->default('متوسط');
-            $table->enum('preferred_activity_level', ['خفيف', 'متوسط', 'متعب'])->nullable();
+            $table->enum('trip_pace', ['slow', 'medium', 'intensive'])->default('medium');
+            $table->enum('preferred_activity_level', ['relax', 'sensible', 'vigour'])->default('sensible');
 
 
-            $table->integer('days');
             $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();
+            $table->integer('day_count');
 
             $table->decimal('total_cost', 10, 2)->nullable();            
 

@@ -11,15 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reviews', function (Blueprint $table) {
-            $table->id();
+        Schema::create('city_guide', function (Blueprint $table) {
+            $table->foreignId('guide_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('city_id')->constrained()->cascadeOnDelete();
 
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('place_id')->constrained()->cascadeOnDelete();
-
-            $table->integer('rating'); // 1–5
-            $table->text('comment')->nullable();
-
+            $table->primary(['guide_id', 'city_id']);
             $table->timestamps();
         });
     }
@@ -30,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reviews');
+        Schema::dropIfExists('city_guide');
     }
 };

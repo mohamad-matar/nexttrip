@@ -14,7 +14,12 @@ return new class extends Migration
         Schema::create('guides', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-
+            $table->enum('state' , ['pending' , 'active' ,'blocked', 'unavailable'])->default('pending');
+            $table->enum('gender' , ['M' , 'F' ]);
+            
+            $table->string('phone');
+            $table->date('DOB');
+            $table->string('avatar')->nullable();
             $table->decimal('price_per_day', 10, 2)->nullable();
             $table->text('bio')->nullable();
 

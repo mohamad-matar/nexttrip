@@ -18,20 +18,23 @@ return new class extends Migration
         Schema::create('places', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('city_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('city_id')->constrained();
+            $table->foreignId('type_id')->constrained();
             
             $table->string('name');
             $table->text('description')->nullable();
+            $table->string('address')->nullable();
+            $table->string('phone')->nullable();
             
             $table->decimal('cost', 10, 2)->nullable();
             $table->foreignId('price_unit_id')->nullable()->constrained('price_units')->nullOnDelete();
             
-            $table->integer('duration_minutes')->default(60);
+            $table->integer('expected_duration_minutes')->nullable(); //الفترة المتوقعة للمكوث في هذا المكان
 
-            $table->enum('activity_level', ['خفيف', 'متوسط', 'متعب'])->default('متوسط');
+            $table->enum('activity_level', ['relax', 'sensible', 'vigour'])->default('sensible');
 
-            // حقول ذكية للفصول والأوقات (نستخدم JSON للمرونة)
             $table->boolean('is_outdoor')->default(false);
+            //  للفصول والأوقات نستخدم JSON للمرونة
             $table->json('best_seasons')->nullable(); // ["spring", "summer"]
             $table->json('recommended_times')->nullable(); // ["morning", "evening"]
             $table->string('opening_hours')->nullable(); 

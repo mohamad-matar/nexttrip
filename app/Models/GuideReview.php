@@ -7,18 +7,18 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 
 #[Fillable([
     'user_id',
-    'place_id',
+    'guid_id',
     'rating',
     'comment'
 ])]
-class Review extends Model
+class GuideReview extends Model
 {
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function place()
+    public function guide()
     {
         return $this->belongsTo(Place::class);
     }
