@@ -30,6 +30,7 @@ return new class extends Migration
             $table->integer('travel_time_minutes')->default(0);// وقت الوصول من المكان السابق
             
             $table->decimal('estimated_cost', 12, 2)->default(0);
+            $table->string('note')->nullable();
             
             $table->unique(['trip_id', 'day_number', 'order']);
             $table->timestamps();

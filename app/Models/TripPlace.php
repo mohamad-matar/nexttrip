@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
     'travel_time_minutes',
 
     'estimated_cost',
+    'note',
 ])]
 class TripPlace extends Model
 {

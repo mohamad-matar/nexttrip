@@ -4,80 +4,52 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\LoginRequest;
+use App\Http\Resources\UserResource;
+use App\Services\AuthService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function __construct(
+        private readonly AuthService $authService
+    ) {}
+
+    public function register(RegisterRequest $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'name'     => 'required|max:50',
-            'email'    => 'required|email|max:100|unique:users,email',
-            'password' => 'required|min:6|confirmed',
-        ]);
-
-        if ($validator->fails()) {
-            return api_error($validator->errors() , "Invalid inputs",  Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
-        $user = User::create([
-            'email'    => $request->email,
-            'password' => $request->password, // سيتم تشفيرها تلقائيًا
-            'name'     => $request->name,
-        ]);
-
-        // إنشاء preference فارغ تلقائيًا
-        $user->preferences()->create([
-            'interests' => json_encode([]),
-            'trip_pace' => 'متوسط',
-            'preferred_activity_level' => 'متوسط',
-            'budget_min' => null,
-            'budget_max' => null,
-        ]);
-
-        $token = $user->createToken("mobile")->plainTextToken;
+        $result = $this->authService->register($request->validated());
 
         return api_success(
-            ['token' => $token],
+            [
+                'token' => $result['token'],
+                'user'  => new UserResource($result['user']),
+            ],
             "Account created successfully",
             Response::HTTP_CREATED
         );
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'email'    => 'required|email',
-            'password' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return api_error($validator->errors() , "Invalid inputs",  Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user || !password_verify($request->password, $user->password)) {
-            return api_error("Invalid credentials", null, Response::HTTP_UNAUTHORIZED);
-        }
-
-        $token = $user->createToken("mobile")->plainTextToken;
+        $result = $this->authService->login($request->validated());
 
         return api_success(
-            ['token' => $token],
+            [
+                'token' => $result['token'],
+                'user'  => new UserResource($result['user']),
+            ],
             "Account login successfully",
             Response::HTTP_OK
         );
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request): JsonResponse
     {
-        $user = $request->user();
-
-        $user?->currentAccessToken()->delete();
+        $request->user()?->currentAccessToken()->delete();
 
         return api_success(null, "Logout successful");
     }
