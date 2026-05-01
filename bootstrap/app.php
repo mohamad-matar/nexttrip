@@ -14,6 +14,19 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         //
     })
-    ->withExceptions(function (Exceptions $exceptions): void {
-        //
-    })->create();
+  ->withExceptions(function (Exceptions $exceptions): void {
+
+    // معالجة خطأ عدم توفر قاعدة البيانات
+    $exceptions->render(function (\Illuminate\Database\QueryException $e, $request) {
+
+        // SQLSTATE[HY000] [2002] = قاعدة البيانات غير متاحة
+        if (str_contains($e->getMessage(), 'SQLSTATE[HY000] [2002]')) {
+            return response()->json([
+                'message' => 'قاعدة البيانات غير متاحة حالياً. يرجى المحاولة لاحقاً.',
+            ], 504);
+        }
+
+        return null; // دع Laravel يتابع المعالجة الافتراضية
+    });
+
+})->create();
