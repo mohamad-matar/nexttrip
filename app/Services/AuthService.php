@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\UserRole;
 use App\Models\Guide;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +23,7 @@ class AuthService
                 'role'     => $data['role'],
             ]);
 
-            if ($data['role'] === 'guide') {
+            if ($data['role'] === UserRole::Guide) {
                 $avatarPath = isset($data['avatar'])
                     ? $data['avatar']->store('avatars')
                     : null;

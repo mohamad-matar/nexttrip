@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('guides', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->enum('state' , ['pending' , 'active' ,'blocked', 'unavailable'])->default('pending');
             $table->enum('gender' , ['M' , 'F' ]);
             
             $table->string('phone');
