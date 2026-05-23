@@ -18,13 +18,12 @@ class PlaceSeeder extends Seeder
             */
             [
                 'city_id' => 1,
-                'type_id' => 1, // منتزه
+                'category_id' => 1, // منتزه
                 'name' => 'حديقة تشرين',
                 'description' => 'أكبر حدائق دمشق، مناسبة للعائلات والأنشطة الخارجية.',
                 'address' => 'دمشق - المزة',
                 'phone' => null,
                 'cost' => 0,
-                'price_unit_id' => null,
                 'expected_duration_minutes' => 90,
                 'activity_level' => 'relax',
                 'is_outdoor' => true,
@@ -38,13 +37,12 @@ class PlaceSeeder extends Seeder
             ],
             [
                 'city_id' => 1,
-                'type_id' => 2, // مطعم
+                'category_id' => 2, // مطعم
                 'name' => 'مطعم بيت ستي',
                 'description' => 'مطعم تراثي يقدم المأكولات الدمشقية الأصيلة.',
                 'address' => 'دمشق - باب توما',
                 'phone' => '0114444444',
                 'cost' => 15,
-                'price_unit_id' => 1,
                 'expected_duration_minutes' => 75,
                 'activity_level' => 'sensible',
                 'is_outdoor' => false,
@@ -64,13 +62,12 @@ class PlaceSeeder extends Seeder
             */
             [
                 'city_id' => 2,
-                'type_id' => 3, // مقهى
+                'category_id' => 3, // مقهى
                 'name' => 'مقهى القلعة',
                 'description' => 'مقهى تراثي يطل على قلعة حلب.',
                 'address' => 'حلب - باب الفرج',
                 'phone' => '021555555',
                 'cost' => 5,
-                'price_unit_id' => 1,
                 'expected_duration_minutes' => 60,
                 'activity_level' => 'relax',
                 'is_outdoor' => false,
@@ -84,13 +81,12 @@ class PlaceSeeder extends Seeder
             ],
             [
                 'city_id' => 2,
-                'type_id' => 26, // موقع أثري
+                'category_id' => 26, // موقع أثري
                 'name' => 'قلعة حلب',
                 'description' => 'واحدة من أقدم القلاع في العالم، معلم أثري عالمي.',
                 'address' => 'حلب - وسط المدينة',
                 'phone' => null,
                 'cost' => 3,
-                'price_unit_id' => 1,
                 'expected_duration_minutes' => 120,
                 'activity_level' => 'vigour',
                 'is_outdoor' => true,
@@ -110,13 +106,12 @@ class PlaceSeeder extends Seeder
             */
             [
                 'city_id' => 3,
-                'type_id' => 9, // شاطئ
+                'category_id' => 9, // شاطئ
                 'name' => 'شاطئ أفاميا',
                 'description' => 'شاطئ رملي جميل مناسب للسباحة والأنشطة البحرية.',
                 'address' => 'اللاذقية - الكورنيش الجنوبي',
                 'phone' => '041444444',
                 'cost' => 10,
-                'price_unit_id' => 1,
                 'expected_duration_minutes' => 180,
                 'activity_level' => 'vigour',
                 'is_outdoor' => true,
@@ -136,13 +131,12 @@ class PlaceSeeder extends Seeder
             */
             [
                 'city_id' => 4,
-                'type_id' => 9, // شاطئ
+                'category_id' => 9, // شاطئ
                 'name' => 'شاطئ الأحلام',
                 'description' => 'شاطئ هادئ مناسب للعائلات.',
                 'address' => 'طرطوس - الكورنيش',
                 'phone' => null,
                 'cost' => 8,
-                'price_unit_id' => 1,
                 'expected_duration_minutes' => 150,
                 'activity_level' => 'relax',
                 'is_outdoor' => true,
@@ -162,13 +156,12 @@ class PlaceSeeder extends Seeder
             */
             [
                 'city_id' => 5,
-                'type_id' => 26, // موقع أثري
+                'category_id' => 26, // موقع أثري
                 'name' => 'قلعة الحصن',
                 'description' => 'من أهم القلاع الصليبية في العالم.',
                 'address' => 'حمص - وادي النصارى',
                 'phone' => null,
                 'cost' => 5,
-                'price_unit_id' => 1,
                 'expected_duration_minutes' => 120,
                 'activity_level' => 'vigour',
                 'is_outdoor' => true,
@@ -188,13 +181,12 @@ class PlaceSeeder extends Seeder
             */
             [
                 'city_id' => 6,
-                'type_id' => 1, // منتزه
+                'category_id' => 1, // منتزه
                 'name' => 'نواعير حماة',
                 'description' => 'أشهر معالم حماة التاريخية.',
                 'address' => 'حماة - العاصي',
                 'phone' => null,
                 'cost' => 0,
-                'price_unit_id' => null,
                 'expected_duration_minutes' => 60,
                 'activity_level' => 'relax',
                 'is_outdoor' => true,
@@ -214,13 +206,12 @@ class PlaceSeeder extends Seeder
             */
             [
                 'city_id' => 7,
-                'type_id' => 26, // موقع أثري
+                'category_id' => 26, // موقع أثري
                 'name' => 'متحف السويداء',
                 'description' => 'متحف يعرض آثار رومانية ونبطية.',
                 'address' => 'السويداء - مركز المدينة',
                 'phone' => null,
                 'cost' => 2,
-                'price_unit_id' => 1,
                 'expected_duration_minutes' => 60,
                 'activity_level' => 'sensible',
                 'is_outdoor' => false,
@@ -240,13 +231,12 @@ class PlaceSeeder extends Seeder
             */
             [
                 'city_id' => 8,
-                'type_id' => 26, // موقع أثري
+                'category_id' => 26, // موقع أثري
                 'name' => 'آثار تدمر',
                 'description' => 'مدينة أثرية عالمية ذات أهمية تاريخية كبيرة.',
                 'address' => 'تدمر - وسط المدينة',
                 'phone' => null,
                 'cost' => 10,
-                'price_unit_id' => 1,
                 'expected_duration_minutes' => 180,
                 'activity_level' => 'vigour',
                 'is_outdoor' => true,

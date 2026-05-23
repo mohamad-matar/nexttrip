@@ -20,6 +20,8 @@ return new class extends Migration
             $table->integer('rating'); // 1–5
             $table->text('comment')->nullable();
 
+            $table->unique(['user_id' , 'place_id' ]);
+
             $table->timestamps();
         });
     }

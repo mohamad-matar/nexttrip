@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Exceptions\BadDataException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -27,6 +28,14 @@ return Application::configure(basePath: dirname(__DIR__))
         }
 
         return null; // دع Laravel يتابع المعالجة الافتراضية
+    });
+
+
+    $exceptions->render(function (BadDataException $e, $request) {
+        return api_error(
+            message: $e->getMessage(),
+            status: 422
+        );
     });
 
 })->create();

@@ -20,14 +20,13 @@ return new class extends Migration
 
             $table->foreignId('trip_id')->constrained()->cascadeOnDelete();
             $table->foreignId('place_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignId('city_id')->constrained()->cascadeOnDelete();
             
             // الترتيب والزمن
             $table->integer('day_number'); // 1,2,3...
             $table->integer('order')->default(1);
             $table->time('start_time');
             $table->integer('duration_minutes'); // مدة النشاط في هذه الرحلة تحديداً
-            $table->integer('travel_time_minutes')->default(0);// وقت الوصول من المكان السابق
+            $table->integer('travel_minutes')->default(0);// وقت الوصول من المكان السابق
             
             $table->decimal('estimated_cost', 12, 2)->default(0);
             $table->string('note')->nullable();

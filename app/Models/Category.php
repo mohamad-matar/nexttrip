@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 #[Table(timestamps: false)]
 #[Fillable(['name'])]
-class Type extends Model
+class Category extends Model
 {
       
 }

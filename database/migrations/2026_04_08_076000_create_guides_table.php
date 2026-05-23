@@ -19,9 +19,9 @@ return new class extends Migration
             $table->string('phone');
             $table->date('DOB');
             $table->string('avatar')->nullable();
-            $table->decimal('price_per_day', 10, 2)->nullable();
+            $table->decimal('daily_price', 10, 2)->nullable();
             $table->text('bio')->nullable();
-
+             
             $table->timestamps();
         });
     }

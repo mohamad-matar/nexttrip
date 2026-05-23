@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Guide;
 use App\Models\City;
-use App\Models\GuideReview;
 use Illuminate\Support\Facades\Hash;
 
 class UserGuideCitySeeder extends Seeder
@@ -85,22 +84,22 @@ class UserGuideCitySeeder extends Seeder
 
             // سائحون
             [
-                'name' => 'أمير',
-                'email' => 'braa@test.com',
+                'name' => 'براء',
+                'email' => 'baraa@test.com',
                 'password' => Hash::make('password'),
-                'role' => 'user',
+                'role' => 'tourist',
             ],
             [
-                'name' => 'سارة أحمد',
-                'email' => 'sara@example.com',
+                'name' => 'محمد مطر',
+                'email' => 'matar@example.com',
                 'password' => Hash::make('password'),
-                'role' => 'user',
+                'role' => 'tourist',
             ],
             [
                 'name' => 'محمد خالد',
                 'email' => 'mohammed@example.com',
                 'password' => Hash::make('password'),
-                'role' => 'user',
+                'role' => 'tourist',
             ],
 
             // مرشدون
@@ -173,11 +172,10 @@ class UserGuideCitySeeder extends Seeder
         foreach ($guidesData as $g) {
             $guide = Guide::create([
                 'user_id' => $users[$g['user_index']]->id,
-                'state' => 'active',
                 'gender' => $g['gender'],
                 'phone' => $g['phone'],
                 'DOB' => $g['DOB'],
-                'price_per_day' => $g['price_per_day'],
+                'daily_price' => $g['price_per_day'],
                 'bio' => $g['bio'],
             ]);            
 
@@ -192,50 +190,5 @@ class UserGuideCitySeeder extends Seeder
         }
 
 
-/*--------------------------------------------------------------------------
-| 4) إنشاء مراجعات المرشدين (guide_reviews)
-|--------------------------------------------------------------------------
-*/
-        $reviewsData = [
-            [
-                'user_index' => 1, // أمير
-                'guide_index' => 0, // مرشد دمشق
-                'rating' => 5,
-                'comment' => 'مرشد رائع وذو خبرة كبيرة في دمشق القديمة.'
-            ],
-            [
-                'user_index' => 2, // سارة أحمد
-                'guide_index' => 1, // مرشد حلب
-                'rating' => 4,
-                'comment' => 'جولة ممتعة ومعلومات قيمة عن الآثار.'
-            ],
-            [
-                'user_index' => 3, // محمد خالد
-                'guide_index' => 2, // مرشد الساحل
-                'rating' => 5,
-                'comment' => 'أفضل جولة على الساحل، شخص لطيف جداً.'
-            ],
-            [
-                'user_index' => 4, // فاطمة علي
-                'guide_index' => 0, // مرشد دمشق
-                'rating' => 3,
-                'comment' => 'الجولة جيدة لكن كان هناك بعض التأخير.'
-            ],
-            [
-                'user_index' => 5, // يوسف عمر
-                'guide_index' => 1, // مرشد حلب
-                'rating' => 5,
-                'comment' => 'شرح ممتاز وتفاصيل دقيقة عن تاريخ حلب.'
-            ],
-        ];
-
-        foreach ($reviewsData as $review) {
-            GuideReview::create([
-                'user_id' => $users[$review['user_index']]->id,
-                'guide_id' => $guidesCreated[$review['guide_index']]->id,
-                'rating' => $review['rating'],
-                'comment' => $review['comment'],
-            ]);
-        }
     }
 }

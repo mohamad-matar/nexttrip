@@ -19,7 +19,7 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('city_id')->constrained();
-            $table->foreignId('type_id')->constrained();
+            $table->foreignId('category_id')->constrained();
             
             $table->string('name');
             $table->text('description')->nullable();
@@ -27,7 +27,6 @@ return new class extends Migration
             $table->string('phone')->nullable();
             
             $table->decimal('cost', 10, 2)->nullable();
-            $table->foreignId('price_unit_id')->nullable()->constrained('price_units')->nullOnDelete();
             
             $table->integer('expected_duration_minutes')->nullable(); //الفترة المتوقعة للمكوث في هذا المكان
 
@@ -37,7 +36,14 @@ return new class extends Migration
             //  للفصول والأوقات نستخدم JSON للمرونة
             $table->json('best_seasons')->nullable(); // ["spring", "summer"]
             $table->json('recommended_times')->nullable(); // ["morning", "evening"]
-            $table->string('opening_hours')->nullable(); 
+            
+            $table->json('opening_hours')->nullable(); 
+            // "opening_hours": {
+            // "monday": [
+            //     { "open": "09:00", "close": "17:00" }
+            // ],  
+            // "sunday": []
+            // }
             
             $table->float('average_rating')->default(0);
             $table->integer('reviews_count')->default(0);

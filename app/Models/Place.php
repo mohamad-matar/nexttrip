@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 #[Fillable([
         'city_id', 
         'name', 'description', 
-        'cost','price_unit_id', 
+        'cost', 
         'duration_minutes', 'activity_level', 
         'is_outdoor', 'best_seasons', 'recommended_times', 'opening_hours'  ,
         'average_rating', 'reviews_count',

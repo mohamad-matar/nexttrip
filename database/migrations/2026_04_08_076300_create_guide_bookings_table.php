@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\GuideBookingStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -9,29 +10,28 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('guide_bookings', function (Blueprint $table) {
-            $table->id();            
+            $table->id();
 
             // السائح الذي قام بالحجز
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('tourist_id')->constrained('users')->cascadeOnDelete();
 
             $table->foreignId('guide_id')->constrained()->cascadeOnDelete();
 
             // ربط الحجز برحلة معينة (اختياري)
-            $table->foreignId('trip_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('trip_id')->nullable()->constrained()->cascadeOnDelete();
 
-            $table->date('book_date'); //تاريخ البدء
-            $table->date('day_count'); //عدد الأيام
+            $table->date('start_date'); //تاريخ البدء
+            $table->unsignedTinyInteger('day_count'); //عدد الأيام 0->255
 
-            $table->enum('status', ['pending', 'accepted', 'rejected', 'canceled'])
-                  ->default('pending');
+            $table->enum('status', GuideBookingStatus::cases())
+                ->default(GuideBookingStatus::Pending->value);
 
             $table->text('description'); //وصف عملية الحجز يضعه السائح
-            $table->string('guide_note'); //يمكن هنا ذكر سبب الرفض أو ملاحظات عند القبول 
+
+            $table->decimal('total_price', 8 ,2);
+            $table->text('last_note')->nullable(); //آخر ملاحظة خلال تغيير حالة الحجز
 
             $table->timestamps();
-
-            // منع حجز المرشد مرتين في نفس اليوم
-            $table->unique(['guide_id', 'book_date']);
         });
     }
 

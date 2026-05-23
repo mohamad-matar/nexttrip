@@ -24,7 +24,7 @@ return new class extends Migration
             $table->date('start_date')->nullable();
             $table->integer('day_count');
 
-            $table->decimal('total_cost', 10, 2)->nullable();            
+            $table->decimal('total_estimated_cost', 10, 2)->nullable();            
 
             $table->timestamps();
         });
