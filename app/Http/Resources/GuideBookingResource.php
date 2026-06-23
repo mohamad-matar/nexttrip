@@ -16,6 +16,8 @@ class GuideBookingResource extends JsonResource
 
         return [
             'booking_id'    => $this->id,
+            'tourist_name' => $this->whenLoaded('tourist' , fn()=>$this->tourist->name),
+
             'guide_name'    => $this->guide->user->name,
             'guide_avatar' =>  asset('storage/avatars/' . ($this->guide->avatar??  "no-image.png")),
 

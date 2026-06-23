@@ -6,8 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class UpdateGuideBookingRequest extends FormRequest
 {
     public function authorize(): bool
-    {
-        // يمكن إضافة شرط صلاحيات (مثلاً: المرشد أو الآدمن فقط)
+    {    
         return true;
     }
 

@@ -1,7 +1,7 @@
 <?php
 
 if (!function_exists('api_success')) {
-    function api_success($data = null, $message = "Success", $status = 200)
+    function api_success($data = null, $message = "تمت العملية بنجاح", $status = 200)
     {
         return response()->json([
             'success' => true,
@@ -12,7 +12,7 @@ if (!function_exists('api_success')) {
 }
 
 if (!function_exists('api_error')) {
-    function api_error($errors = null , $message = "Error", $status = 400)
+    function api_error($errors = null , $message = "فشلت العملية ", $status = 400)
     {
         return response()->json([
             'success' => false,

@@ -24,14 +24,15 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 #[ObservedBy([GuideBookingObserver::class])]
 class GuideBooking extends Model
 {
+
     protected $casts = [
         'start_date'  => 'date',
         'status' => GuideBookingStatus::class,
     ];
 
-    public function user(): BelongsTo
+    public function tourist(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class , 'tourist_id');
     }
 
     public function guide(): BelongsTo

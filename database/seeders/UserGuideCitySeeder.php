@@ -84,34 +84,34 @@ class UserGuideCitySeeder extends Seeder
 
             // سائحون
             [
-                'name' => 'براء',
-                'email' => 'baraa@test.com',
+                'name' => 'محمد سليمان',
+                'email' => 'suliman@test.com',
                 'password' => Hash::make('password'),
                 'role' => 'tourist',
             ],
             [
-                'name' => 'محمد مطر',
-                'email' => 'matar@example.com',
+                'name' => 'نور كاملة',
+                'email' => 'noor@example.com',
                 'password' => Hash::make('password'),
                 'role' => 'tourist',
             ],
             [
-                'name' => 'محمد خالد',
-                'email' => 'mohammed@example.com',
+                'name' => 'محمد نور',
+                'email' => 'mhd@example.com',
                 'password' => Hash::make('password'),
                 'role' => 'tourist',
             ],
 
             // مرشدون
             [
-                'name' => 'مرشد دمشق',
-                'email' => 'guide.damascus@example.com',
+                'name' => 'براء حمود',
+                'email' => 'baraa@test.com',
                 'password' => Hash::make('password'),
                 'role' => 'guide',
             ],
             [
-                'name' => 'مرشد حلب',
-                'email' => 'guide.aleppo@example.com',
+                'name' => 'محمد مطر',
+                'email' => 'matar@example.com',
                 'password' => Hash::make('password'),
                 'role' => 'guide',
             ],

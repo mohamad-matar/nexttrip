@@ -10,7 +10,6 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -68,7 +67,11 @@ class User extends Authenticatable
         return $this->role === UserRole::Guide;
     }
     function isActive(){
-        return $this->status === UserStatus::Active;
+        return $this->status === UserStatus::Active 
+        || $this->status === UserStatus::Unavailable;
+    }
+    function isAvailable(){
+        return $this->status === UserStatus::Unavailable; 
     }
     
 }

@@ -9,6 +9,7 @@ use App\Models\Guide;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class AuthService
 {
@@ -33,13 +34,13 @@ class AuthService
                     'gender'        => $data['gender'],
                     'phone'         => $data['phone'],
                     'DOB'           => $data['DOB'],
-                    'price_per_day' => $data['price_per_day'],
+                    'daily_price' => $data['daily_price'],
                     'bio'           => $data['bio'],
                     'avatar'        => $avatarPath,
                 ]);
             }
 
-            $token = $user->createToken("mobile")->plainTextToken;
+            $token = $user->createToken("token")->plainTextToken;
 
             return [
                 'user'  => $user,
@@ -52,13 +53,16 @@ class AuthService
     {
         $user = User::where('email', $data['email'])->first();
 
+
         if (!$user || !Hash::check($data['password'], $user->password)) {
-            abort(422, "Invalid credentials");
+            throw ValidationException::withMessages([
+                'email' => ['بيانات التوثق غير صحيحة'],
+            ]);
         }
 
         return [
             'user'  => $user,
-            'token' => $user->createToken("mobile")->plainTextToken,
+            'token' => $user->createToken("token")->plainTextToken,
         ];
     }
 }

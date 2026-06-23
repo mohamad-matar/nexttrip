@@ -2,33 +2,42 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Guide;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class GuideResource extends JsonResource
 {
+    public function __construct(Guide $resource, protected bool $detailed = false)
+    {
+        parent::__construct($resource);
+    }
+
     public function toArray($request)
-    {       
+    {
         return [
             'guide_id'     => $this->id,
             'name'         => $this->user->name,
+            'status'         => $this->user->status,
 
             'avatar'       => asset('storage/avatars/' . ($this->avatar ?? "no-image.png")),
-            
+            'phone'         => $this->phone,
             'age'          => Carbon::parse($this->DOB)->age,
             'gender'          => $this->gender,
-            
+
             'daily_price'  => $this->daily_price,
             'bio'          => $this->bio,
 
-            // المحافظات كسلسلة نصية
-            'cities'       => $this->whenLoaded('cities', function () {
-                return $this->cities->pluck('name')->implode(', ');
+            'cities'    => $this->whenLoaded('cities', function () {
+                return $this->detailed
+                    ? $this->cities
+                    : $this->cities->pluck('name')->implode(', ');
             }),
 
-            // اللغات كسلسلة نصية
             'languages'    => $this->whenLoaded('languages', function () {
-                return $this->languages->pluck('name')->implode(', ');
+                return $this->detailed
+                    ? $this->languages
+                    : $this->languages->pluck('name')->implode(', ');
             }),
 
             'bookings_count' => $this->bookings_count,
