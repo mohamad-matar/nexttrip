@@ -8,7 +8,6 @@ use App\Http\Resources\GuideResource;
 
 use App\Models\Guide;
 
-use App\Services\GuideBooking\ListGuidesService;
 
 use Illuminate\Http\Request;
 

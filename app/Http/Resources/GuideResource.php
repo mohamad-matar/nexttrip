@@ -20,8 +20,10 @@ class GuideResource extends JsonResource
             'name'         => $this->user->name,
             'status'         => $this->user->status,
 
-            'avatar'       => asset('storage/avatars/' . ($this->avatar ?? "no-image.png")),
+            'avatar'       => asset('storage/' . ($this->avatar ?? "no-image.png")),
             'phone'         => $this->phone,
+            
+            'DOB'          => $this->DOB,
             'age'          => Carbon::parse($this->DOB)->age,
             'gender'          => $this->gender,
 

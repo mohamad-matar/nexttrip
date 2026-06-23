@@ -49,7 +49,7 @@ Route::middleware(['auth:sanctum', 'role:guide' ])
             Route::post('',  'update');
         });
 
-        Route::prefix('booking')->controller(BookingController::class)->group(function () {
+        Route::prefix('bookings')->controller(BookingController::class)->group(function () {
             Route::get('/', 'index');
             Route::post('/{booking}/accept', 'accept');
             Route::post('/{booking}/reject',  'reject');

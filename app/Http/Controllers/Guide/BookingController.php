@@ -6,17 +6,19 @@ use App\Enums\GuideBookingStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\GuideBookingResource;
 use App\Models\GuideBooking;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class BookingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $guide = Auth::user()->guide;
-
+        $status = $request->status;
         $bookings = GuideBooking::where('guide_id', $guide->id)
-            ->with(['user', 'logs'])
+            ->with(['tourist', 'logs'])
+            ->status(GuideBookingStatus::tryFrom( $status))
             ->latest()
             ->get();
 

@@ -7,6 +7,7 @@ use App\Observers\GuideBookingObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -30,6 +31,10 @@ class GuideBooking extends Model
         'status' => GuideBookingStatus::class,
     ];
 
+    function scopeStatus(Builder $q , ?GuideBookingStatus $guideBookingStatus){
+        if (! $guideBookingStatus) return $q;
+        return $q->where('status' , $guideBookingStatus);
+    }
     public function tourist(): BelongsTo
     {
         return $this->belongsTo(User::class , 'tourist_id');
