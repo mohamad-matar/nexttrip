@@ -1,19 +1,20 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Public;
 
-use App\Models\Language;
+use App\Http\Controllers\Controller;
+use App\Models\City;
 use Illuminate\Http\Request;
 
-class LanguageController extends Controller
+class CityController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $languages = Language::all();
-        return api_success($languages , "كافة اللغات");
+        $cities = City::all();
+        return api_success($cities , "كافة المدن");
     }
 
     /**
@@ -35,7 +36,7 @@ class LanguageController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Language $language)
+    public function show(City $city)
     {
         //
     }
@@ -43,7 +44,7 @@ class LanguageController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Language $language)
+    public function edit(City $city)
     {
         //
     }
@@ -51,7 +52,7 @@ class LanguageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Language $language)
+    public function update(Request $request, City $city)
     {
         //
     }
@@ -59,7 +60,7 @@ class LanguageController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Language $language)
+    public function destroy(City $city)
     {
         //
     }

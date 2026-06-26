@@ -16,5 +16,5 @@ class BookingReview extends Model
     public function booking() : BelongsTo
     {
         return $this->belongsTo(GuideBooking::class, 'booking_id');
-    }    
+    }            
 }
