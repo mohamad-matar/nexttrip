@@ -10,8 +10,7 @@ use App\Http\Controllers\Tourist\GuideBookingController as TouristGuideBookingCo
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Public\GuideController;
-
-
+use App\Http\Controllers\Tourist\ReviewController as TouristReviewController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -40,6 +39,9 @@ Route::middleware(['auth:sanctum', 'role:tourist' ])
         Route::post('/guide-bookings/{guide}/book', [TouristGuideBookingController::class, 'book']);
         Route::post('/guide-bookings/{booking}/cancel', [TouristGuideBookingController::class, 'cancel']);
         Route::post('/guide-bookings/{booking}/review', [TouristGuideBookingController::class, 'review']);
+
+        Route::get('/reviews', [TouristReviewController::class, 'index']);
+
     });
 
 Route::middleware(['auth:sanctum', 'role:guide' ])

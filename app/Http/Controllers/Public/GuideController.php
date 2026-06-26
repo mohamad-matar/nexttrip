@@ -62,7 +62,7 @@ class GuideController extends Controller
             ->loadAvg('reviews', 'rating');
 
         return api_success(
-            new GuideResource($guide),
+            new GuideResource($guide ,false),
             "guide details"
         );
     }

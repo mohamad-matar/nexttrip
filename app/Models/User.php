@@ -71,7 +71,7 @@ class User extends Authenticatable
         || $this->status === UserStatus::Unavailable;
     }
     function isAvailable(){
-        return $this->status === UserStatus::Unavailable; 
+        return $this->status === UserStatus::Active; 
     }
     
 }
