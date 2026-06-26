@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();            
             $table->foreignId('booking_id')->unique()->constrained('guide_bookings')->cascadeOnDelete();
 
-            $table->integer('rating'); // 1–5
+            $table->unsignedTinyInteger('rating'); // 1–5
             $table->text('comment')->nullable();
 
             $table->timestamps();

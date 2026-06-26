@@ -78,7 +78,7 @@ class UserGuideCitySeeder extends Seeder
             [
                 'name' => 'مدير النظام',
                 'email' => 'admin@test.com',
-                'password' => Hash::make('admin123'),
+                'password' => Hash::make('password'),
                 'role' => 'admin',
             ],
 
@@ -91,13 +91,13 @@ class UserGuideCitySeeder extends Seeder
             ],
             [
                 'name' => 'نور كاملة',
-                'email' => 'noor@example.com',
+                'email' => 'noor@test.com',
                 'password' => Hash::make('password'),
                 'role' => 'tourist',
             ],
             [
                 'name' => 'محمد نور',
-                'email' => 'mhd@example.com',
+                'email' => 'mhd@test.com',
                 'password' => Hash::make('password'),
                 'role' => 'tourist',
             ],
@@ -111,13 +111,13 @@ class UserGuideCitySeeder extends Seeder
             ],
             [
                 'name' => 'محمد مطر',
-                'email' => 'matar@example.com',
+                'email' => 'matar@test.com',
                 'password' => Hash::make('password'),
                 'role' => 'guide',
             ],
             [
                 'name' => 'مرشد الساحل',
-                'email' => 'guide.coast@example.com',
+                'email' => 'guide.coast@test.com',
                 'password' => Hash::make('password'),
                 'role' => 'guide',
             ],

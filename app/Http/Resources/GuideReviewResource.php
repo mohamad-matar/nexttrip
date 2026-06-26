@@ -9,11 +9,16 @@ class GuideReviewResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'      => $this->id,
-            'user'    => $this->user->name,
-            'rating'  => $this->rating,
-            'comment' => $this->comment,
-            'date'    => $this->created_at->format('Y-m-d'),
+            'id' => $this->review->id,
+            'rating' => $this->review->rating,
+            'comment' => $this->review->comment,
+            'created_at' => $this->review->created_at,
+            
+            'tourist_name' => $this->tourist->name,
+            'trip_date' => $this->start_date,
+            'day_count' => $this->day_count,            
         ];
     }
 }
+
+

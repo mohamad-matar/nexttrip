@@ -20,13 +20,15 @@ class DatabaseSeeder extends Seeder
             InterestSeeder::class,
             LanguageSeeder::class,
             CategorySeeder::class
-        ]);        
+        ]);
 
         /** cities- useres-guides */
         $this->call([
             UserGuideCitySeeder::class,
+            
             GuideLanguageSeeder::class,
-            GuideBookingSeeder::class
+            GuideBookingSeeder::class,
+            GuideBookingAndReviewSeeder::class,
         ]);
         /** places */
         // $this->call([

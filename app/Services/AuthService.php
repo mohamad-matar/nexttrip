@@ -24,7 +24,7 @@ class AuthService
                 'role'     => $data['role'],
             ]);
 
-            if ($data['role'] === UserRole::Guide) {
+            if (UserRole::from($data['role']) === UserRole::Guide) {
                 $avatarPath = isset($data['avatar'])
                     ? $data['avatar']->store('avatars')
                     : null;

@@ -17,8 +17,8 @@ class ProfileController extends Controller
     {
         $guide = Auth::user()->guide;
         $guide->load('languages', 'cities');
-        // return $guide;
-        return api_success(data: new GuideResource($guide, true));
+        // return $guide; 
+        return api_success(data: new GuideResource($guide));
     }
 
     public function update(UpdateGuideProfileRequest $request)
@@ -29,7 +29,7 @@ class ProfileController extends Controller
         $guide = Auth::user()->guide;
 
         if ($request->hasFile('avatar')) {
-            if ($guide->avatar)  Storage::delete("$guide->avatar");
+            if ($guide->avatar)  Storage::delete($guide->avatar);
             $guideData['avatar'] = $request->file('avatar')->store('avatars');
         }
 
@@ -46,6 +46,6 @@ class ProfileController extends Controller
         // تحديث المدن
         $guide->cities()->sync($request->cities);
 
-        return api_success(data: new GuideResource($guide));
+        return api_success(data: new GuideResource($guide->refresh()));
     }
 }

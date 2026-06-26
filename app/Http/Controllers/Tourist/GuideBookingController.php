@@ -103,7 +103,7 @@ class GuideBookingController extends Controller
         Gate::authorize('review', $booking);
 
         $data = $request->validate([
-            'rating'  => ['required', 'in:1,2,3,4,5'],
+            'rating'  => ['required', 'integer', 'between:1,5'],
             'comment' => ['nullable', 'string', 'max:2000'],
         ]);
 

@@ -8,7 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class GuideResource extends JsonResource
 {
-    public function __construct(Guide $resource, protected bool $detailed = false)
+    public function __construct(Guide $resource, protected bool $detailed = true)
     {
         parent::__construct($resource);
     }

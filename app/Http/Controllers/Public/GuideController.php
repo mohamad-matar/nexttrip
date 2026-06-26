@@ -11,8 +11,6 @@ use App\Models\Guide;
 
 use Illuminate\Http\Request;
 
-use function PHPUnit\Framework\isArray;
-
 class GuideController extends Controller
 {
 
@@ -37,8 +35,14 @@ class GuideController extends Controller
             ]))
             ->latest()
             ->paginate(12);
+
+
+        $mappedGuides = $guides->map(function ($guide) {
+            return new GuideResource($guide, false);
+        });
+
         return api_success(
-            GuideResource::collection($guides),
+            $mappedGuides,
             "Guides"
         );
     }

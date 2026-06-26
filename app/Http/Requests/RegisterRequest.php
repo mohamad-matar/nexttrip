@@ -13,7 +13,7 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'role' => 'required|in:user,guide',
+            'role' => 'required|in:tourist,guide',
 
             'name' => 'required|string|min:2',
             'email' => 'required|email|unique:users,email',
@@ -22,7 +22,7 @@ class RegisterRequest extends FormRequest
             // guide only
             'DOB'         => 'required_if:role,guide|date',
             'phone'       => 'required_if:role,guide|string|min:8',
-            'price_per_day' => 'required_if:role,guide|numeric|min:1',
+            'daily_price' => 'required_if:role,guide|numeric|min:1',
             'bio'         => 'required_if:role,guide|string|min:10',
             'gender'      => 'string|in:M,F',
             'avatar'      => 'nullable|image|max:2048',

@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\Guide\BookingController;
 use App\Http\Controllers\Guide\ProfileController;
+use App\Http\Controllers\Guide\ReviewController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Tourist\GuideBookingController as TouristGuideBookingController;
 use Illuminate\Http\Request;
@@ -55,4 +56,5 @@ Route::middleware(['auth:sanctum', 'role:guide' ])
             Route::post('/{booking}/reject',  'reject');
             Route::post('/{booking}/cancel',  'cancel');
         });
+        Route::get('/reviews', [ReviewController::class, 'index']);
     });
