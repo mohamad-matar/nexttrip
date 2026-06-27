@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\GuideBookingStatus;
 use Illuminate\Database\Seeder;
 use App\Models\GuideBooking;
 use App\Models\BookingReview;
@@ -42,7 +43,7 @@ class GuideBookingAndReviewSeeder extends Seeder
                 // إنشاء 3 حجوزات لكل سائح مع كل مرشد
                 for ($i = 0; $i < 3; $i++) {
 
-                    $startDate = Carbon::today()->subDays(rand(1, 60)); // حجوزات منتهية
+                    $startDate = Carbon::today()->subDays(rand(1, 60)); 
                     $dayCount = rand(1, 3);
 
                     $booking = GuideBooking::create([
@@ -51,7 +52,7 @@ class GuideBookingAndReviewSeeder extends Seeder
                         'trip_id' => null,
                         'start_date' => $startDate,
                         'day_count' => $dayCount,
-                        'status' => 'accepted',
+                        'status' => GuideBookingStatus::Accepted,
                         'description' => 'حجز تجريبي.',
                         'total_price' => rand(50, 200),
                         'last_note' => 'تمت الجولة بنجاح.',

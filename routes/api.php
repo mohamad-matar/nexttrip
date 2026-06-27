@@ -14,6 +14,9 @@ use App\Http\Controllers\Guide\ReviewController;
 use App\Http\Controllers\Tourist\GuideBookingController as TouristGuideBookingController;
 use App\Http\Controllers\Tourist\ReviewController as TouristReviewController;
 
+
+use App\Http\Controllers\NotificationController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -67,3 +70,19 @@ Route::middleware(['auth:sanctum', 'role:tourist'])
 
         Route::get('/reviews', [TouristReviewController::class, 'index']);
     });
+
+//الاشعارات
+Route::middleware('auth:sanctum')->group(function () {
+
+    // كل الإشعارات
+    Route::get('/notifications', [NotificationController::class, 'index']);
+
+    // الإشعارات الجديدة فقط
+    Route::get('/notifications/unread', [NotificationController::class, 'unread']);
+
+    // عدد الإشعارات الجديدة
+    Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount']);
+
+    // وضع علامة مقروء للجميع
+    Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
+});

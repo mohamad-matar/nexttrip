@@ -6,7 +6,9 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Guide;
 use App\Models\City;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserGuideCitySeeder extends Seeder
 {
@@ -34,7 +36,6 @@ class UserGuideCitySeeder extends Seeder
                 'description' => 'مدينة ساحلية جميلة على البحر الأبيض المتوسط.'
             ],
 
-            // المدن الجديدة
             [
                 'name' => 'طرطوس',
                 'image' => 'tartous.jpg',
@@ -73,6 +74,17 @@ class UserGuideCitySeeder extends Seeder
         | 2) إنشاء المستخدمين
         |--------------------------------------------------------------------------
         */
+
+        $files = File::files(database_path('seeders/images/avatars'));
+
+        foreach ($files as $file) {
+            Storage::disk('public')->putFileAs(
+                'avatars',
+                $file,
+                $file->getFilename()
+            );
+        }
+
         $usersData = [
             // آدمن
             [
@@ -84,23 +96,18 @@ class UserGuideCitySeeder extends Seeder
 
             // سائحون
             [
-                'name' => 'محمد سليمان',
-                'email' => 'suliman@test.com',
-                'password' => Hash::make('password'),
-                'role' => 'tourist',
-            ],
-            [
                 'name' => 'نور كاملة',
                 'email' => 'noor@test.com',
                 'password' => Hash::make('password'),
                 'role' => 'tourist',
             ],
             [
-                'name' => 'محمد نور',
-                'email' => 'mhd@test.com',
+                'name' => 'محمد سليمان',
+                'email' => 'suliman@test.com',
                 'password' => Hash::make('password'),
                 'role' => 'tourist',
             ],
+
 
             // مرشدون
             [
@@ -115,12 +122,7 @@ class UserGuideCitySeeder extends Seeder
                 'password' => Hash::make('password'),
                 'role' => 'guide',
             ],
-            [
-                'name' => 'مرشد الساحل',
-                'email' => 'guide.coast@test.com',
-                'password' => Hash::make('password'),
-                'role' => 'guide',
-            ],
+
         ];
 
         $users = [];
@@ -136,32 +138,27 @@ class UserGuideCitySeeder extends Seeder
 
         $guidesData = [
             [
-                'user_index' => 4, // مرشد دمشق
-                'gender' => 'M',
+                'user_index' => 3,
+                'gender' => 'F',
                 'phone' => '0999999999',
-                'DOB' => '1985-01-01',
-                'price_per_day' => 50,
+                'DOB' => '2005-01-01',
+                'daily_price' => 50,
                 'bio' => 'مرشد سياحي بخبرة 10 سنوات في دمشق القديمة.',
-                'cities' => [0], // دمشق
+                'avatar' => 'avatars/guide1.jpg',
+                
+                'cities' => [0,4], // دمشق
             ],
             [
-                'user_index' => 5, // مرشد حلب
-                'gender' => 'M',
+                'user_index' => 4,
+                'gender' => 'F',
                 'phone' => '0988888888',
-                'DOB' => '1988-05-12',
-                'price_per_day' => 40,
+                'DOB' => '2000-05-12',
+                'daily_price' => 40,
                 'bio' => 'مرشد متخصص في الآثار في مدينة حلب.',
+                'avatar' => 'avatars/guide2.jpg',
                 'cities' => [1], // حلب
             ],
-            [
-                'user_index' => 6, // مرشد الساحل
-                'gender' => 'M',
-                'phone' => '0977777777',
-                'DOB' => '1990-09-20',
-                'price_per_day' => 45,
-                'bio' => 'مرشد سياحي في الساحل السوري، خبرة في اللاذقية وطرطوس.',
-                'cities' => [2], // اللاذقية
-            ],
+            
         ];
 
 
@@ -175,9 +172,10 @@ class UserGuideCitySeeder extends Seeder
                 'gender' => $g['gender'],
                 'phone' => $g['phone'],
                 'DOB' => $g['DOB'],
-                'daily_price' => $g['price_per_day'],
+                'avatar' => $g['avatar'],
+                'daily_price' => $g['daily_price'],
                 'bio' => $g['bio'],
-            ]);            
+            ]);
 
             $guidesCreated[] = $guide;
 
@@ -188,7 +186,5 @@ class UserGuideCitySeeder extends Seeder
                 )
             );
         }
-
-
     }
 }

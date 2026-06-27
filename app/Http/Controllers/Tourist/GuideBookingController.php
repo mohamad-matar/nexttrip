@@ -11,6 +11,8 @@ use App\Http\Resources\GuideBookingResource;
 use App\Models\BookingReview;
 use App\Models\Guide;
 use App\Models\GuideBooking;
+use App\Notifications\AlterBookingNotification;
+use App\Notifications\NewBookingNotification;
 use App\Services\CheckGuideAvailability;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -70,15 +72,19 @@ class GuideBookingController extends Controller
         $data['guide_id'] = $guide->id;
 
         $booking = GuideBooking::create($data);
+         
+        $guide->user->notify(new NewBookingNotification(
+                touristName: Auth::user()->name,
+                startDate: $booking->start_date,
+                days: $booking->day_count
+            ));
 
         return api_success(new GuideBookingResource($booking), "تم إضافة الحجز", 201);
     }
 
     public function cancel(GuideBooking $booking, Request $request)
-    {
-
+    {        
         Gate::authorize('cancelByTourist', $booking);
-
         // 3) يجب ألا يكون الفرق أقل من 7 أيام
         $daysDiff = now()->diffInDays($booking->start_date, absolute: false);
 
@@ -87,12 +93,19 @@ class GuideBookingController extends Controller
         }
 
         $booking->update([
-            'status' => GuideBookingStatus::CancelledByTourist->value,
-            'cancel_date' => Carbon::now(),
+            'status' => GuideBookingStatus::CancelledByTourist,
             'last_note'   => $request->note,
         ]);
 
         $booking =  $booking->load('logs');
+
+        $guide = $booking->guide->user;
+        $guide->notify(new AlterBookingNotification(
+            bookingId: $booking->id,
+            status: GuideBookingStatus::CancelledByTourist->value,
+            message: 'تم إلغاء الحجز من قبل السائح',
+            note: $request->note
+        ));
 
         return api_success(new GuideBookingResource($booking), ['message' => 'تم إلغاء الحجز بنجاح']);
     }

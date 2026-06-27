@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Guide;
 use Illuminate\Database\Seeder;
-use App\Models\GuideLanguage;
 
 class GuideLanguageSeeder extends Seeder
 {
@@ -18,10 +17,7 @@ class GuideLanguageSeeder extends Seeder
             // المرشد الثاني
             ['guide_id' => 2, 'language_id' => 1],
             ['guide_id' => 2, 'language_id' => 3], // فرنسي
-
-            // المرشد الثالث
-            ['guide_id' => 3, 'language_id' => 1],
-            ['guide_id' => 3, 'language_id' => 4], // روسي
+            
         ];
 
         foreach ($data as $item) {

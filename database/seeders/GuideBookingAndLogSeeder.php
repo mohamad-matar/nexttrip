@@ -9,7 +9,7 @@ use App\Models\BookingReview;
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
 
-class GuideBookingSeeder extends Seeder
+class GuideBookingAndLogSeeder extends Seeder
 {
     public function run(): void
     {
@@ -45,6 +45,22 @@ class GuideBookingSeeder extends Seeder
                 'day_count' => 1,
                 'status' => GuideBookingStatus::Pending,
                 'description' => 'جولة مستقبلية قريبة.',
+                'should_review' => false,
+                'cancelled_by_user' => false,
+            ],
+            [
+                'offset' => +4,
+                'day_count' => 1,
+                'status' => GuideBookingStatus::Pending,
+                'description' => 'جولة مستقبلية قريبة.',
+                'should_review' => false,
+                'cancelled_by_user' => false,
+            ],
+            [
+                'offset' => +20,
+                'day_count' => 3,
+                'status' => GuideBookingStatus::Accepted,
+                'description' => 'جولة مستقبلية بعيدة.',
                 'should_review' => false,
                 'cancelled_by_user' => false,
             ],

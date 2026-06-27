@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
     'description',
     'status',
     'total_price',
+    'last_note'
 ])]
 #[ObservedBy([GuideBookingObserver::class])]
 class GuideBooking extends Model
