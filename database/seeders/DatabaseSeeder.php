@@ -27,8 +27,7 @@ class DatabaseSeeder extends Seeder
             UserGuideCitySeeder::class,
             
             GuideLanguageSeeder::class,
-            GuideBookingAndLogSeeder::class,
-            GuideBookingAndReviewSeeder::class,
+            BookingAndLogِsAndReviewsSeeder::class,
         ]);
         /** places */
         // $this->call([

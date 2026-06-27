@@ -25,7 +25,7 @@ class NewBookingNotification extends Notification
         return [
             'type' => 'new-booking',
             'tourist_name' => $this->touristName,
-            'message' => "لديك طلب حجز جديد من {$this->touristName}",
+            'message' => "لديك طلب حجز جديد",
             'start_date' => $this->startDate,
             'days' => $this->days,
         ];

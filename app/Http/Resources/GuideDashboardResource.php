@@ -41,9 +41,6 @@ class GuideDashboardResource extends JsonResource
                         $booking->start_date->copy()->addDays($booking->day_count - 1)->format('d M Y'),
                 ];
             }),
-
-
-            'calendar' => $this['calendar'],
         ];
     }
 }

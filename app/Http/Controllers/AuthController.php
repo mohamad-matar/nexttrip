@@ -52,4 +52,9 @@ class AuthController extends Controller
 
         return api_success(null, "Logout successful");
     }
+    
+    public function me(Request $request): JsonResponse
+    {
+        return api_success($request->user(), "Logout successful");
+    }
 }

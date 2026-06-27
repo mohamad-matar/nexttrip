@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Guide;
 
+use App\Enums\GuideBookingStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\GuideDashboardResource;
 use Illuminate\Support\Facades\Auth;
@@ -12,18 +13,16 @@ class GuideDashboardController extends Controller
     {
         $guide = Auth::user()->guide;
 
-        // الحجوزات المؤكدة
-        $confirmedBookings = $guide->bookings()
-            ->where('status', 'confirmed')
-            ->get();
-
-        // عدد الأيام المحجوزة
-        $bookedDays = $confirmedBookings->sum(function ($booking) {
-            return $booking->start_date->diffInDays($booking->end_date) + 1;
-        });
-
         // عدد الرحلات المؤكدة
-        $confirmedTrips = $confirmedBookings->count();
+        $confirmedTrips = $guide->bookings()
+            ->where('status', GuideBookingStatus::Accepted)
+            ->count();
+
+            // عدد الأيام المحجوزة
+        $bookedDays = $guide->bookings()
+            ->where('status', GuideBookingStatus::Accepted)
+            ->sum('day_count');
+          
 
         // الطلبات الجديدة
         $newRequests = $guide->bookings()
@@ -44,13 +43,7 @@ class GuideDashboardController extends Controller
             ->latest()
             ->take(5)
             ->get();
-
-        // أيام التقويم (أيام بداية الرحلات المؤكدة)
-        $calendarDays = $confirmedBookings
-            ->pluck('start_date')
-            ->map(fn($date) => $date->day)
-            ->values();
-
+        
         return api_success(new GuideDashboardResource([
             'guide' => $guide,
             'stats' => [
@@ -60,7 +53,6 @@ class GuideDashboardController extends Controller
             ],
             'latest_reviews' => $latestReviews,
             'latest_bookings' => $latestBookings,
-            'calendar' => $calendarDays,
         ]));
     }
 }

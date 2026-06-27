@@ -66,5 +66,12 @@ class GuideBookingObserver
             $booking->status = \App\Enums\GuideBookingStatus::Completed;
             $booking->saveQuietly();
         }
+        if (
+            $booking->status === \App\Enums\GuideBookingStatus::Pending &&
+            now()->greaterThan($end)
+        ) {
+            $booking->status = \App\Enums\GuideBookingStatus::Expired;
+            $booking->saveQuietly();
+        }
     }
 }
