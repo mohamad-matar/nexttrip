@@ -101,7 +101,6 @@ class GuideBookingController extends Controller
 
         $guide = $booking->guide->user;
         $guide->notify(new AlterBookingNotification(
-            bookingId: $booking->id,
             status: GuideBookingStatus::CancelledByTourist->value,
             message: 'تم إلغاء الحجز من قبل السائح',
             note: $request->note

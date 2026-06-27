@@ -21,7 +21,7 @@ class BookingAndLogِsAndReviewsSeeder extends Seeder
 
         $bookings = [
             [
-                'offset' => -40,
+                'offset' => +40,
                 'day_count' => 3,
                 'status' => GuideBookingStatus::Accepted,
                 'description' => 'جولة قديمة انتهت منذ فترة.',
@@ -29,7 +29,7 @@ class BookingAndLogِsAndReviewsSeeder extends Seeder
                 'cancelled_by_user' => false,
             ],
             [
-                'offset' => -10,
+                'offset' => +10,
                 'day_count' => 2,
                 'status' => GuideBookingStatus::Accepted,
                 'description' => 'جولة انتهت حديثاً.',
@@ -77,7 +77,7 @@ class BookingAndLogِsAndReviewsSeeder extends Seeder
                 'cancelled_by_user' => false,
             ],
             [
-                'offset' => -15,
+                'offset' => +15,
                 'day_count' => 1,
                 'status' => GuideBookingStatus::CancelledByTourist,
                 'description' => 'تم إلغاء الحجز من قبل المستخدم.',
@@ -89,11 +89,12 @@ class BookingAndLogِsAndReviewsSeeder extends Seeder
         $created = [];
 
         foreach ($bookings as $i => $data) {
-
-            $startDate = $today->copy()->addDays($data['offset']);
+            
+            $createdAt = $today->copy()->subDays($data['offset']);
+            
+            $startDate = $today->copy()->addDays(rand(5,10));
             $endDate   = $startDate->copy()->addDays($data['day_count']);
 
-            $createdAt = $startDate->copy()->subDays(rand(2, 5));
             $updatedAt = $createdAt->copy()->addDays(rand(1, 3));
 
             // dump([
