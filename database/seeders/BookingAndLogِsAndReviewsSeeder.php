@@ -138,7 +138,7 @@ class BookingAndLogِsAndReviewsSeeder extends Seeder
 
             if ($booking->status ===  GuideBookingStatus::Pending)
                 $booking->guide->user->notify(new NewBookingNotification(
-                touristName: User::find(rand(1,2))->name,
+                touristName: User::find(rand(2,3))->name,
                 startDate: $booking->start_date,
                 days: $booking->day_count
             ));
