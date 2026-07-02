@@ -29,7 +29,7 @@ class GuideBookingController extends Controller
             'guide.user:id,name',
             'review'
         ])->where('tourist_id', Auth::id())
-            ->latest()
+            ->orderBy('start_date' , 'desc')
             ->get();
         // return $bookings;
         return api_success(GuideBookingResource::collection($bookings), "كافة الحجوزات");

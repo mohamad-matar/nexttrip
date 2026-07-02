@@ -20,7 +20,7 @@ class BookingController extends Controller
         $bookings = GuideBooking::where('guide_id', $guide->id)
             ->with(['tourist', 'logs'])
             ->status(GuideBookingStatus::tryFrom($status))
-            ->latest()
+            ->orderBy('start_date' , 'desc')
             ->get();
 
         return api_success(data: GuideBookingResource::collection($bookings));
