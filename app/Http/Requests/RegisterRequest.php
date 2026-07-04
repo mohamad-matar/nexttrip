@@ -26,6 +26,9 @@ class RegisterRequest extends FormRequest
             'bio'         => 'required_if:role,guide|string|min:10',
             'gender'      => 'string|in:M,F',
             'avatar'      => 'nullable|image|max:2048',
+
+            'languages' => 'nullable|array',
+            'languages.*' => 'integer|exists:languages,id',
         ];
     }
 

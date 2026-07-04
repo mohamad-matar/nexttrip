@@ -42,7 +42,7 @@ class Guide extends Model
 
     public function languages(): BelongsToMany
     {
-        return $this->belongsToMany(Language::class);
+        return $this->belongsToMany(Language::class)->withTimestamps();
     }
 
     public function cities(): BelongsToMany

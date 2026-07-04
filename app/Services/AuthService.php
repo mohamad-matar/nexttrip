@@ -29,7 +29,7 @@ class AuthService
                     ? $data['avatar']->store('avatars')
                     : null;
 
-                Guide::create([
+                $guide = Guide::create([
                     'user_id'       => $user->id,
                     'gender'        => $data['gender'],
                     'phone'         => $data['phone'],
@@ -38,6 +38,10 @@ class AuthService
                     'bio'           => $data['bio'],
                     'avatar'        => $avatarPath,
                 ]);
+
+                if ($data['languages']??null){
+                    $guide->languages()->attach($data['languages']);
+                }
             }
 
             $token = $user->createToken("token")->plainTextToken;
