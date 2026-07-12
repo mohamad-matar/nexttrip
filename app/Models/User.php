@@ -14,7 +14,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'password', 'role'])]
+#[Fillable(['name', 'email', 'password', 'role', 'status'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -45,6 +45,11 @@ class User extends Authenticatable
     public function Bookings()
     {
         return $this->hasMany(GuideBooking::class, 'user_id');
+    }
+    
+    public function suggestedPlaces()
+    {
+        return $this->hasMany(SuggestedPlace::class);
     }
 
 

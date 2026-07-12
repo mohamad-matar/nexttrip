@@ -30,11 +30,10 @@ class DatabaseSeeder extends Seeder
             BookingAndLogِsAndReviewsSeeder::class,
         ]);
         /** places */
-        // $this->call([
-        //     PlaceSeeder::class,
-        //     PlaceImageSeeder::class,
-        //     InterestPlaceSeeder::class,
-        // ]);
+        $this->call([
+            SuggestedPlaceSeeder::class,
+            PlaceSeeder::class,            
+        ]);
 
         /** trips */
         // $this->call([

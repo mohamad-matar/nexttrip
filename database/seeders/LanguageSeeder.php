@@ -10,14 +10,16 @@ class LanguageSeeder extends Seeder
     public function run(): void
     {
         $langs = [
-            ['code' => 'ar', 'name' => 'العربية'],
-            ['code' => 'en', 'name' => 'الإنكليزية'],
-            ['code' => 'fr', 'name' => 'الفرنسية'],
-            ['code' => 'ru', 'name' => 'الروسية'],
+            [ 'name' => 'العربية'],
+            [ 'name' => 'الإنكليزية'],
+            [ 'name' => 'الفرنسية'],
+            [ 'name' => 'الروسية'],
         ];
 
         foreach ($langs as $lang) {
             Language::create($lang);
         }
+
+        $this->command->info('Languages seeded successfully.');
     }
 }

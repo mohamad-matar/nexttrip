@@ -47,7 +47,7 @@ class GuideBooking extends Model
     }
     public function trip(): BelongsTo
     {
-        return $this->belongsTo(Guide::class);
+        return $this->belongsTo(Trip::class);
     }
 
     public function review(): HasOne

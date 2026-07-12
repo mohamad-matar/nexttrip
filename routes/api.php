@@ -2,9 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 
-use App\Http\Controllers\Public\CityController;
 use App\Http\Controllers\Public\GuideController;
-use App\Http\Controllers\Public\LanguageController;
 
 use App\Http\Controllers\Guide\GuideDashboardController;
 use App\Http\Controllers\Guide\BookingController;
@@ -16,7 +14,7 @@ use App\Http\Controllers\Tourist\ReviewController as TouristReviewController;
 
 
 use App\Http\Controllers\NotificationController;
-
+use App\Http\Controllers\Public\LookupController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,12 +31,29 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::prefix('public')->group(function () {
-    Route::get('/cities', [CityController::class, 'index']);
-    Route::get('/languages', [LanguageController::class, 'index']);
+    Route::get('/cities', [LookupController::class, 'cities']);
+    Route::get('/languages', [LookupController::class, 'languages']);
 
     Route::get('/guides', [GuideController::class, 'index']);
     Route::get('/guides/{guide}', [GuideController::class, 'show']);
 });
+
+Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(function () {
+    Route::apiResource('cities', \App\Http\Controllers\Admin\CityController::class);
+    Route::apiResource('categories', \App\Http\Controllers\Admin\CategoryController::class);
+    Route::apiResource('places', \App\Http\Controllers\Admin\PlaceController::class);
+    Route::apiResource('languages', \App\Http\Controllers\Admin\LanguageController::class);
+    Route::apiResource('interests', \App\Http\Controllers\Admin\InterestController::class);
+    
+    Route::apiResource('users', \App\Http\Controllers\Admin\UserController::class);
+    Route::patch('users/{user}/status', [\App\Http\Controllers\Admin\UserController::class, 'changeStatus']);
+    Route::patch('users/{user}/role', [\App\Http\Controllers\Admin\UserController::class, 'makeAdmin']);
+    
+    Route::get('suggested-places', [\App\Http\Controllers\SuggestedPlaceController::class, 'index']);
+    Route::patch('suggested-places/{suggestedPlace}/status', [\App\Http\Controllers\SuggestedPlaceController::class, 'updateStatus']);
+});
+
+Route::middleware(['auth:sanctum', 'role:guide,tourist'])->post('suggested-places', [\App\Http\Controllers\SuggestedPlaceController::class, 'store']);
 
 Route::middleware(['auth:sanctum', 'role:guide'])
     ->prefix('guide')

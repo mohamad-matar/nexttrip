@@ -13,10 +13,19 @@ class UserRole
      *
      * @param  Closure(Request): (Response)  $next
      */
-    public function handle(Request $request, Closure $next, string $role): Response
+    public function handle(Request $request, Closure $next, string $roles): Response
     {
-        if ($request->user()->role->value != $role)
-            return api_error("لا يحق لك طلب هذه الوظيفة");
+        $user = $request->user();
+
+        if (! $user ) {
+            return api_error('لا يحق لك طلب هذه الوظيفة');
+        }
+
+        $allowedRoles = array_map('trim', explode(',', $roles));
+
+        if (! in_array($user->role->value, $allowedRoles, true)) {
+            return api_error('لا يحق لك طلب هذه الوظيفة');
+        }
 
         return $next($request);
     }

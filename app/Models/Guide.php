@@ -50,7 +50,7 @@ class Guide extends Model
         return $this->belongsToMany(City::class);
     }
     
-
+    
     public function scopeFilter(Builder $query, array $filters): Builder
     {
         return $query

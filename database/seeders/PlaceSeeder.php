@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\File;
 use App\Models\Place;
+use App\Models\Interest;
 
 class PlaceSeeder extends Seeder
 {
@@ -19,7 +21,7 @@ class PlaceSeeder extends Seeder
             [
                 'city_id' => 1,
                 'category_id' => 1, // منتزه
-                'name' => 'حديقة تشرين',
+                'name' => 'حديقة الأمويين',
                 'description' => 'أكبر حدائق دمشق، مناسبة للعائلات والأنشطة الخارجية.',
                 'address' => 'دمشق - المزة',
                 'phone' => null,
@@ -250,8 +252,56 @@ class PlaceSeeder extends Seeder
             ],
         ];
 
-        foreach ($places as $place) {
-            Place::create($place);
+        $interestMap = [
+            'حديقة الأمويين' => ['تاريخ وآثار', 'عائلي وأطفال', 'طبيعة ومغامرات'],
+            'مطعم بيت ستي' => ['طعام ومطاعم', 'ثقافة وفنون'],
+            'مقهى القلعة' => ['طعام ومطاعم', 'ثقافة وفنون'],
+            'قلعة حلب' => ['تاريخ وآثار', 'تصوير'],
+            'شاطئ أفاميا' => ['طبيعة - بحر', 'رياضة', 'تصوير'],
+            'شاطئ الأحلام' => ['طبيعة - بحر', 'عائلي وأطفال'],
+            'قلعة الحصن' => ['تاريخ وآثار', 'تصوير'],
+            'نواعير حماة' => ['تاريخ وآثار', 'تصوير'],
+            'متحف السويداء' => ['تاريخ وآثار', 'ثقافة وفنون'],
+            'آثار تدمر' => ['تاريخ وآثار', 'طبيعة ومغامرات', 'تصوير'],
+        ];
+
+        $placeImagesBasePath = database_path('seeders/images/places');
+        File::ensureDirectoryExists(public_path('storage/places'));
+
+        foreach ($places as $index => $placeData) {
+            if (!empty($placeData['opening_hours']) && !is_array($placeData['opening_hours'])) {
+                $placeData['opening_hours'] = json_encode(['default' => $placeData['opening_hours']]);
+            }
+
+            $place = Place::create($placeData);
+
+            $interestNames = $interestMap[$placeData['name']] ?? [];
+            if (!empty($interestNames)) {
+                $interestIds = Interest::whereIn('name', $interestNames)->pluck('id')->all();
+                $place->interests()->sync($interestIds);
+            }
+
+            $sourceDir = $placeImagesBasePath . DIRECTORY_SEPARATOR . ($index + 1);
+            if (File::isDirectory($sourceDir)) {
+                $images = File::files($sourceDir);
+                $order = 1;
+
+                foreach ($images as $imageFile) {
+                    $originalFilename = $imageFile->getFilename();
+                    $extension = $imageFile->getExtension();
+                    $newFilename = $place->id . '_' . $order . '.' . $extension;
+                    $destinationPath = public_path('storage/places/' . $newFilename);
+
+                    if (!File::exists($destinationPath)) {
+                        File::copy($imageFile->getPathname(), $destinationPath);
+                    }
+
+                    $place->images()->create([
+                        'image_url' => $newFilename,
+                        'order' => $order++,
+                    ]);
+                }
+            }
         }
     }
 }
