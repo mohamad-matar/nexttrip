@@ -12,6 +12,7 @@ use App\Http\Controllers\Guide\ReviewController;
 
 use App\Http\Controllers\Tourist\GuideBookingController as TouristGuideBookingController;
 use App\Http\Controllers\Tourist\ReviewController as TouristReviewController;
+use App\Http\Controllers\Tourist\AiRecommendationController;
 
 
 use App\Http\Controllers\NotificationController;
@@ -96,8 +97,15 @@ Route::middleware(['auth:sanctum', 'role:tourist'])
 
         Route::get('/reviews', [TouristReviewController::class, 'index']);
 
+
+        Route::prefix('ai')->group(function () {
+            Route::post('/nearby-recommendations', [AiRecommendationController::class, 'nearbyRecommendations']);
+            Route::post('/smart-trip-planner', [AiRecommendationController::class, 'smartTripPlanner']);
+        });
+
         Route::get('/trips', [TripPlaceController::class, 'trips']);
         Route::post('/trips/{trip}/places', [TripPlaceController::class, 'store']);
+
     });
 
 //الاشعارات
