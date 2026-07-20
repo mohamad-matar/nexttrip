@@ -62,6 +62,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
 
     Route::get('suggested-places', [\App\Http\Controllers\SuggestedPlaceController::class, 'index']);
     Route::patch('suggested-places/{suggestedPlace}/status', [\App\Http\Controllers\SuggestedPlaceController::class, 'updateStatus']);
+
+    Route::get('analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index']);
 });
 
 Route::middleware(['auth:sanctum', 'role:guide,tourist'])->post('suggested-places', [\App\Http\Controllers\SuggestedPlaceController::class, 'store']);
