@@ -14,7 +14,7 @@ class City extends Model
     {
         if (empty($this->image)) {
             return null;
-        }
+        }   
         return asset('storage/cities/' . $this->image);
     }
 

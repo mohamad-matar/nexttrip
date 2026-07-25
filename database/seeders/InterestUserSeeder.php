@@ -14,7 +14,7 @@ class InterestUserSeeder extends Seeder
         // مثال: ربط بعض المستخدمين ببعض الاهتمامات
         $data = [
             [
-                'user_id' => 2,   // أمير
+                'user_id' => 2,   // نور كاملة
                 'interest_id' => 1, // طبيعة
             ],
             [
@@ -22,20 +22,16 @@ class InterestUserSeeder extends Seeder
                 'interest_id' => 3, // جبل
             ],
             [
-                'user_id' => 3,   // سارة
+                'user_id' => 3,   // محمد سليمان
                 'interest_id' => 2, // بحر
             ],
             [
-                'user_id' => 4,   // محمد
+                'user_id' => 3,  
                 'interest_id' => 5, // تسوق
             ],
             [
-                'user_id' => 5,   // فاطمة
+                'user_id' => 3,  
                 'interest_id' => 7, // متاحف
-            ],
-            [
-                'user_id' => 6,   // يوسف
-                'interest_id' => 4, // نهر
             ],
         ];
 
