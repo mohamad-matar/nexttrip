@@ -286,8 +286,7 @@ class PlaceSeeder extends Seeder
                 $images = File::files($sourceDir);
                 $order = 1;
 
-                foreach ($images as $imageFile) {
-                    $originalFilename = $imageFile->getFilename();
+                foreach ($images as $imageFile) {                    
                     $extension = $imageFile->getExtension();
                     $newFilename = $place->id . '_' . $order . '.' . $extension;
                     $destinationPath = public_path('storage/places/' . $newFilename);
