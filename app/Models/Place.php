@@ -27,10 +27,21 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 ])]
 class Place extends Model
 {
+    protected $appends = ['image_url'];
+
     protected $casts = [
         'best_seasons' => 'array',
         'recommended_times' => 'array',
     ];
+
+    public function getImageUrlAttribute(): ?string
+    {
+        $firstImage = $this->images->where('order', 1)->first();
+        if ($firstImage && !empty($firstImage->image_url)) {
+            return asset('storage/places/' . $firstImage->image_url);
+        }
+        return null;
+    }
 
 
     public function city()

@@ -39,13 +39,14 @@ Route::controller(AuthController::class)->group(function () {
 Route::prefix('public')->group(function () {
     Route::get('/cities', [LookupController::class, 'cities']);
     Route::get('/languages', [LookupController::class, 'languages']);
+    Route::get('/top-places', [LookupController::class, 'topPlaces']);
 
     Route::get('/guides', [GuideController::class, 'index']);
     Route::get('/guides/{guide}', [GuideController::class, 'show']);
 
     Route::get('/places', [MapPlaceController::class, 'index']);
     Route::get('/places/{place}', [MapPlaceController::class, 'show']);
-    
+
     Route::get('/categories', [CategoryController::class, 'index']);
 
     Route::prefix('ai')->group(function () {
@@ -65,8 +66,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     Route::patch('users/{user}/status', [\App\Http\Controllers\Admin\UserController::class, 'changeStatus']);
     Route::patch('users/{user}/role', [\App\Http\Controllers\Admin\UserController::class, 'makeAdmin']);
 
-    Route::get('suggested-places', [\App\Http\Controllers\SuggestedPlaceController::class, 'index']);
-    Route::patch('suggested-places/{suggestedPlace}/status', [\App\Http\Controllers\SuggestedPlaceController::class, 'updateStatus']);
+    Route::patch('suggested-places/{suggestedPlace}/review', [\App\Http\Controllers\SuggestedPlaceController::class, 'review']);
 
     Route::get('analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index']);
 
@@ -74,7 +74,10 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     Route::get('bookings/{booking}', [\App\Http\Controllers\Admin\BookingController::class, 'show']);
 });
 
-Route::middleware(['auth:sanctum', 'role:guide,tourist'])->post('suggested-places', [\App\Http\Controllers\SuggestedPlaceController::class, 'store']);
+Route::middleware(['auth:sanctum', 'role:guide,tourist'])->group(function () {
+    Route::post('suggested-places', [\App\Http\Controllers\SuggestedPlaceController::class, 'store']);
+    Route::delete('suggested-places/{suggestedPlace}', [\App\Http\Controllers\SuggestedPlaceController::class, 'destroy']);
+});
 
 Route::middleware(['auth:sanctum', 'role:guide'])
     ->prefix('guide')
@@ -112,9 +115,8 @@ Route::middleware(['auth:sanctum', 'role:tourist'])
 
     });
 
-//الاشعارات
-Route::middleware('auth:sanctum')->group(function () {
-
+    Route::middleware('auth:sanctum')->group(function () {
+    //الاشعارات
     // كل الإشعارات
     Route::get('/notifications', [NotificationController::class, 'index']);
 
@@ -126,4 +128,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // وضع علامة مقروء للجميع
     Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
+
+// suggested places
+    Route::get('suggested-places', [\App\Http\Controllers\SuggestedPlaceController::class, 'index']);
+    Route::get('suggested-places/{suggestedPlace}', [\App\Http\Controllers\SuggestedPlaceController::class, 'show']);
+
 });

@@ -6,6 +6,7 @@ use App\Enums\SuggestedPlaceStatus;
 use App\Models\SuggestedPlace;
 use App\Models\User;
 use App\Models\City;
+use App\Notifications\SuggestedPlaceSubmittedNotification;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
@@ -37,16 +38,13 @@ class SuggestedPlaceSeeder extends Seeder
             $allImageNames[] = $fileName;
         }
 
-        $bloudan = City::firstOrCreate(
-            ['name' => 'بلودان'],
-            ['description' => 'منطقة سياحية جبلية قرب ريف دمشق، تشتهر بكهوفها والمناظر الطبيعية.']
-        );
+        $city = City::first();
 
         $tourist = User::where('role', 'tourist')->first() ?? $users->random();
 
-        SuggestedPlace::create([
+        $suggestedPlace = SuggestedPlace::create([
             'user_id' => $tourist->id,
-            'city_id' => $bloudan->id,
+            'city_id' => $city->id,
             'name' => 'مغارة موسى - بلودان',
             'description' => 'مغارة تاريخية في بلودان بريف دمشق، تُعد وجهة سياحية فريدة تُظهِر تشكيلات صخرية ونقوشاً أثرية ضمن أجواء الكهف.',
             'latitude' => 33.6930,
@@ -55,6 +53,15 @@ class SuggestedPlaceSeeder extends Seeder
             'status' => SuggestedPlaceStatus::Pending->value,
         ]);
 
+        $admin = User::where('role', 'admin')->first();
+        if ($admin) {
+            $admin->notify(new SuggestedPlaceSubmittedNotification(
+                $suggestedPlace->id,
+                'مغارة موسى - بلودان',      
+                $city->name,
+                $tourist->name,
+            ));
+        }
         $this->command->info(" تم إنشاء اقتراح مكان بنجاح.");
 
     }

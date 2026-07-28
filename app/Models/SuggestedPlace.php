@@ -20,26 +20,52 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 ])]
 class SuggestedPlace extends Model
 {
-    protected $appends = ['image_urls'];
+    // protected $appends = ['image_urls'];
 
     protected $casts = [
         'images' => 'array',
         'status' => \App\Enums\SuggestedPlaceStatus::class,
     ];
 
-    protected function imageUrls(): Attribute
+
+
+    /**
+     * Accessor لتحويل أسماء الصور إلى مسارات كاملة باستخدام asset
+     */
+    protected function images(): Attribute
     {
         return Attribute::make(
-            get: function () {
-                $images = $this->images ?? [];
+            get: function ($value) {
+
+                // 1. فك تشفير حقل الـ JSON المخزن في قاعدة البيانات إلى مصفوفة PHP
+                $images = is_string($value) ? json_decode($value, true) : $value;
+
+                // التأكد من أنها مصفوفة صالحة وليست فارغة            
                 if (! is_array($images) || empty($images)) {
                     return [];
                 }
 
-                return array_map(fn ($image) => asset('storage/suggested/' . $image), $images);
+                // 2. الدوران على كل اسم ملف وبناء الرابط الكامل له عبر دالة asset
+                return array_map(function ($imageName) {
+                    return asset('storage/suggested-places/' . $imageName);
+                }, $images);
             }
         );
     }
+
+    // protected function imageUrls(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: function () {
+    //             $images = $this->images ?? [];
+    //             if (! is_array($images) || empty($images)) {
+    //                 return [];
+    //             }
+
+    //             return array_map(fn ($image) => asset('storage/suggested/' . $image), $images);
+    //         }
+    //     );
+    // }
 
     public function user()
     {
