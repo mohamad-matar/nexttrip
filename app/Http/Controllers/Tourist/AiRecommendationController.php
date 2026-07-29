@@ -27,9 +27,9 @@ class AiRecommendationController extends Controller
     public function smartTripPlanner(Request $request)
     {
         $payload = $request->validate($this->baseRules() + [
-            'days' => ['sometimes', 'integer', 'min:1', 'max:1'],
+            'start_date' => ['required', 'date', 'after_or_equal:today'],
+            'days' => ['required', 'integer', 'min:1', 'max:14'],
         ]);
-        $payload['days'] = 1;
 
         return api_success(
             $this->aiRecommendationService->smartTripPlanner($payload),
