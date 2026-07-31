@@ -30,8 +30,9 @@ class Place extends Model
     protected $appends = ['image_url'];
 
     protected $casts = [
-        'best_seasons' => 'array',
-        'recommended_times' => 'array',
+        'best_seasons' => \App\Casts\FlexibleJsonCast::class,
+        'recommended_times' => \App\Casts\FlexibleJsonCast::class,
+        'opening_hours' => 'array',
     ];
 
     public function getImageUrlAttribute(): ?string

@@ -18,8 +18,15 @@ use App\Http\Controllers\Tourist\TripPlaceController;
 
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CityController;
+use App\Http\Controllers\Admin\InterestController;
+use App\Http\Controllers\Admin\LanguageController;
+use App\Http\Controllers\Admin\PlaceController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\AnalyticsController;
 
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SuggestedPlaceController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -39,44 +46,40 @@ Route::controller(AuthController::class)->group(function () {
 Route::prefix('public')->group(function () {
     Route::get('/cities', [LookupController::class, 'cities']);
     Route::get('/languages', [LookupController::class, 'languages']);
-    Route::get('/top-places', [LookupController::class, 'topPlaces']);
-
+    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/interests', [InterestController::class, 'index']);
+    
     Route::get('/guides', [GuideController::class, 'index']);
     Route::get('/guides/{guide}', [GuideController::class, 'show']);
 
     Route::get('/places', [MapPlaceController::class, 'index']);
     Route::get('/places/{place}', [MapPlaceController::class, 'show']);
 
-    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/top-places', [LookupController::class, 'topPlaces']);
 
     Route::prefix('ai')->group(function () {
-            Route::post('/nearby-recommendations', [AiRecommendationController::class, 'nearbyRecommendations']);
-            Route::post('/smart-trip-planner', [AiRecommendationController::class, 'smartTripPlanner']);
-        });
+        Route::post('/nearby-recommendations', [AiRecommendationController::class, 'nearbyRecommendations']);
+        Route::post('/smart-trip-planner', [AiRecommendationController::class, 'smartTripPlanner']);
+    });
 });
 
 Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(function () {
-    Route::apiResource('cities', \App\Http\Controllers\Admin\CityController::class);
-    Route::apiResource('categories', \App\Http\Controllers\Admin\CategoryController::class);
-    Route::apiResource('places', \App\Http\Controllers\Admin\PlaceController::class);
-    Route::apiResource('languages', \App\Http\Controllers\Admin\LanguageController::class);
-    Route::apiResource('interests', \App\Http\Controllers\Admin\InterestController::class);
+    Route::apiResource('cities', CityController::class);
+    Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('places', PlaceController::class);
+    Route::apiResource('languages', LanguageController::class);
+    Route::apiResource('interests', InterestController::class);
 
-    Route::apiResource('users', \App\Http\Controllers\Admin\UserController::class);
-    Route::patch('users/{user}/status', [\App\Http\Controllers\Admin\UserController::class, 'changeStatus']);
-    Route::patch('users/{user}/role', [\App\Http\Controllers\Admin\UserController::class, 'makeAdmin']);
+    Route::apiResource('users', UserController::class);
+    Route::patch('users/{user}/status', [UserController::class, 'changeStatus']);
+    Route::patch('users/{user}/role', [UserController::class, 'makeAdmin']);
 
-    Route::patch('suggested-places/{suggestedPlace}/review', [\App\Http\Controllers\SuggestedPlaceController::class, 'review']);
+    Route::patch('suggested-places/{suggestedPlace}/review', [SuggestedPlaceController::class, 'review']);
 
-    Route::get('analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index']);
+    Route::get('analytics', [AnalyticsController::class, 'index']);
 
-    Route::get('bookings', [\App\Http\Controllers\Admin\BookingController::class, 'index']);
-    Route::get('bookings/{booking}', [\App\Http\Controllers\Admin\BookingController::class, 'show']);
-});
-
-Route::middleware(['auth:sanctum', 'role:guide,tourist'])->group(function () {
-    Route::post('suggested-places', [\App\Http\Controllers\SuggestedPlaceController::class, 'store']);
-    Route::delete('suggested-places/{suggestedPlace}', [\App\Http\Controllers\SuggestedPlaceController::class, 'destroy']);
+    Route::get('bookings', [BookingController::class, 'index']);
+    Route::get('bookings/{booking}', [BookingController::class, 'show']);
 });
 
 Route::middleware(['auth:sanctum', 'role:guide'])
@@ -108,14 +111,13 @@ Route::middleware(['auth:sanctum', 'role:tourist'])
         Route::post('/guide-bookings/{booking}/cancel', [TouristGuideBookingController::class, 'cancel']);
         Route::post('/guide-bookings/{booking}/review', [TouristGuideBookingController::class, 'review']);
 
-        Route::get('/reviews', [TouristReviewController::class, 'index']);        
+        Route::get('/reviews', [TouristReviewController::class, 'index']);
 
         Route::get('/trips', [TripPlaceController::class, 'trips']);
         Route::post('/trips/{trip}/places', [TripPlaceController::class, 'store']);
-
     });
 
-    Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     //الاشعارات
     // كل الإشعارات
     Route::get('/notifications', [NotificationController::class, 'index']);
@@ -129,8 +131,12 @@ Route::middleware(['auth:sanctum', 'role:tourist'])
     // وضع علامة مقروء للجميع
     Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
 
-// suggested places
-    Route::get('suggested-places', [\App\Http\Controllers\SuggestedPlaceController::class, 'index']);
-    Route::get('suggested-places/{suggestedPlace}', [\App\Http\Controllers\SuggestedPlaceController::class, 'show']);
+    // suggested places
+    Route::get('suggested-places', [SuggestedPlaceController::class, 'index']);
+    Route::get('suggested-places/{suggestedPlace}', [SuggestedPlaceController::class, 'show']);
+});
 
+Route::middleware(['auth:sanctum', 'role:guide,tourist'])->group(function () {
+    Route::post('suggested-places', [SuggestedPlaceController::class, 'store']);
+    Route::delete('suggested-places/{suggestedPlace}', [SuggestedPlaceController::class, 'destroy']);
 });

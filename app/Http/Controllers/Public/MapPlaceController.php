@@ -16,6 +16,8 @@ class MapPlaceController extends Controller
             'longitude' => ['nullable', 'numeric', 'between:-180,180', 'required_with:latitude,radius'],
             'radius' => ['nullable', 'numeric', 'min:0.1', 'max:50', 'required_with:latitude,longitude'],
             'category_id' => ['nullable', 'integer', 'exists:categories,id'],
+            'city_id' => ['nullable', 'integer', 'exists:cities,id'],
+            'q' => ['nullable', 'string', 'max:100'],
             'min_cost' => ['nullable', 'numeric', 'min:0'],
             'max_cost' => ['nullable', 'numeric', 'gte:min_cost'],
         ]);
@@ -23,8 +25,20 @@ class MapPlaceController extends Controller
         $places = Place::query()->with(['city', 'category', 'images', 'interests'])
             ->whereNotNull('latitude')->whereNotNull('longitude')
             ->when($filters['category_id'] ?? null, fn ($query, $categoryId) => $query->where('category_id', $categoryId))
+            ->when($filters['city_id'] ?? null, fn ($query, $cityId) => $query->where('city_id', $cityId))
             ->when($filters['min_cost'] ?? null, fn ($query, $cost) => $query->where('cost', '>=', $cost))
-            ->when($filters['max_cost'] ?? null, fn ($query, $cost) => $query->where('cost', '<=', $cost));
+            ->when($filters['max_cost'] ?? null, fn ($query, $cost) => $query->where('cost', '<=', $cost))
+            ->when($filters['q'] ?? null, function ($query, $term) {
+                $like = "%{$term}%";
+                $query->where(function ($query) use ($like) {
+                    $query->where('name', 'like', $like)
+                        ->orWhere('description', 'like', $like)
+                        ->orWhere('address', 'like', $like)
+                        ->orWhere('phone', 'like', $like)
+                        ->orWhereHas('city', fn ($query) => $query->where('name', 'like', $like))
+                        ->orWhereHas('category', fn ($query) => $query->where('name', 'like', $like));
+                });
+            });
 
         if (isset($filters['latitude'], $filters['longitude'], $filters['radius'])) {
             $latitude = $filters['latitude'];
