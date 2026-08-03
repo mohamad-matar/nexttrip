@@ -15,6 +15,7 @@ use App\Http\Controllers\Guide\ReviewController;
 use App\Http\Controllers\Tourist\GuideBookingController as TouristGuideBookingController;
 use App\Http\Controllers\Tourist\ReviewController as TouristReviewController;
 use App\Http\Controllers\Tourist\TripPlaceController;
+use App\Http\Controllers\Tourist\TouristInterestController;
 
 
 use App\Http\Controllers\Admin\CategoryController;
@@ -24,7 +25,7 @@ use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\PlaceController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AnalyticsController;
-
+use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SuggestedPlaceController;
 
@@ -78,8 +79,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
 
     Route::get('analytics', [AnalyticsController::class, 'index']);
 
-    Route::get('bookings', [BookingController::class, 'index']);
-    Route::get('bookings/{booking}', [BookingController::class, 'show']);
+    Route::get('bookings', [AdminBookingController::class, 'index']);
+    Route::get('bookings/{booking}', [AdminBookingController::class, 'show']);
 });
 
 Route::middleware(['auth:sanctum', 'role:guide'])
@@ -115,6 +116,9 @@ Route::middleware(['auth:sanctum', 'role:tourist'])
 
         Route::get('/trips', [TripPlaceController::class, 'trips']);
         Route::post('/trips/{trip}/places', [TripPlaceController::class, 'store']);
+
+        Route::get('/interests', [TouristInterestController::class, 'index']);
+        Route::post('/interests', [TouristInterestController::class, 'store']);
     });
 
 Route::middleware('auth:sanctum')->group(function () {
