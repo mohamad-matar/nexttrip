@@ -10,14 +10,14 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
 from scripts.genetic_trip_planner import plan_trip
-from scripts.database_places import read_database_places
+from scripts.backend_places import read_backend_places
 from scripts.predict_recommendations import read_places, score_places
 
 
 BASE_DIR = Path(__file__).resolve().parent
 MODEL_PATH = BASE_DIR / "models/recommender_random_forest.joblib"
 PLACES_PATH = BASE_DIR / "data/places.csv"
-PLACES_SOURCE = os.getenv("AI_PLACES_SOURCE", "db").lower()
+PLACES_SOURCE = os.getenv("AI_PLACES_SOURCE", "api").lower()
 
 app = FastAPI(title="Place Recommendation API")
 
@@ -55,7 +55,7 @@ def load_artifacts() -> None:
 def load_places() -> list[dict[str, Any]]:
     if PLACES_SOURCE == "csv":
         return read_places(PLACES_PATH)
-    return read_database_places()
+    return read_backend_places()
 
 
 def refresh_places(raise_on_error: bool = True) -> None:
@@ -68,7 +68,7 @@ def refresh_places(raise_on_error: bool = True) -> None:
         if raise_on_error:
             raise HTTPException(
                 status_code=503,
-                detail=f"Places database is not available: {places_error}",
+                detail=f"Places API is not available: {places_error}",
             ) from exc
 
 

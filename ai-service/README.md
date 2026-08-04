@@ -4,11 +4,15 @@ FastAPI service for place recommendations and smart trip planning.
 
 ## Source of Truth
 
-By default, the service reads places from the Laravel database configured in the parent `.env` file:
+By default, the service reads places from the Laravel backend API:
 
 ```text
-../.env
+http://127.0.0.1:8000/api/internal/ai/places
 ```
+
+Override the endpoint with `AI_BACKEND_PLACES_URL` when Laravel runs on another host.
+Set the same `AI_INTERNAL_TOKEN` in Laravel and the AI service if the internal
+endpoint should require a shared token.
 
 The trained model is loaded from:
 

@@ -23,6 +23,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Public\MapPlaceController;
 use App\Http\Controllers\Tourist\TripPlaceController;
+use App\Http\Controllers\Internal\AiPlaceController;
+use App\Http\Middleware\EnsureAiInternalToken;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -47,6 +49,10 @@ Route::prefix('public')->group(function () {
     Route::get('/places/{place}', [MapPlaceController::class, 'show']);
     
     Route::get('/categories', [CategoryController::class, 'index']);
+});
+
+Route::prefix('internal/ai')->group(function () {
+    Route::get('/places', [AiPlaceController::class, 'index'])->middleware(EnsureAiInternalToken::class);
 });
 
 Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(function () {
