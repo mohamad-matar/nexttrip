@@ -2,62 +2,88 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
 use App\Models\SuggestedPlace;
+use App\Models\User;
+use App\Notifications\SuggestedPlaceSubmittedNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+
 
 class SuggestedPlaceController extends Controller
 {
     public function index(Request $request)
     {
-        $query = SuggestedPlace::query()->with(['user', 'city']);
+        $suggestedPlaces = SuggestedPlace::query()
+            ->with(['user:id,name,role', 'city'])
+            ->when($request->filled('status'), fn($q) => $q->where('status', $request->status))
+            ->when($request->user()->isTourist() || $request->user()->isGuide(), fn($q) => $q->where('user_id', $request->user()->id))
+            ->latest()
+            ->get();
 
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        return api_success($query->latest()->get());
+        return api_success($suggestedPlaces);
     }
 
     public function show(SuggestedPlace $suggestedPlace)
     {
+        Gate::authorize('view', $suggestedPlace);
         return api_success($suggestedPlace->load(['user', 'city']));
     }
 
     public function store(Request $request)
     {
+        Gate::authorize('create', SuggestedPlace::class);
+
         $data = $request->validate([
-            'user_id' => 'nullable|exists:users,id',
             'city_id' => 'required|exists:cities,id',
             'name' => 'required|string|max:191',
             'description' => 'nullable|string',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            // التحقق من مصفوفة الصور وأن كل عنصر داخلها هو صورة فعلياً
             'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
-
-        $data['user_id'] = $data['user_id'] ?? $request->user()?->id;
-
+        $user = $request->user();
+        $data['user_id'] = $user->id;
         $storedImages = [];
-        if ($request->hasFile('image')) {
-            $storedImages[] = $request->file('image')->store('suggested-places', 'public');
+        // الدوران على مصفوفة الصور ورفعها ملفاً تلو الآخر
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $file) {
+                if ($file->isValid()) {
+                    $storedImages[] = basename($file->store('suggested-places', 'public'));
+                }
+            }
         }
 
-        if (! empty($data['images'])) {
-            $storedImages = array_merge($storedImages, (array) $data['images']);
-        }
-
-        $data['images'] = array_values(array_filter(array_unique($storedImages)));
-        unset($data['image']);
+        // تنظيف وتصفية المسارات المخزنة
+        $data['images'] = array_values(array_unique(array_filter($storedImages)));
 
         $suggestedPlace = SuggestedPlace::create($data);
-        return api_success($suggestedPlace->load(['user', 'city']), 'تم الإنشاء', 201);
+
+        // 2. جلب بيانات المدينة لإرسالها في الإشعار
+        $city = City::find($data['city_id']);
+
+        // 3. إرسال الإشعار للأدمن
+        $admin = User::where('role', 'admin')->first();
+        if ($admin && $city) {
+            $admin->notify(new SuggestedPlaceSubmittedNotification(
+                $suggestedPlace->id,
+                $suggestedPlace->name, 
+                $city->name,           
+                $user->name         
+            ));
+        }
+
+        return api_success($suggestedPlace->load(['user', 'city']), 'تم الإنشاء والمراسلة بنجاح', 201);
     }
 
-    public function updateStatus(Request $request, SuggestedPlace $suggestedPlace)
+    public function review(Request $request, SuggestedPlace $suggestedPlace)
     {
+        Gate::authorize('review', $suggestedPlace);
+
         $data = $request->validate([
-            'status' => 'sometimes|in:pending,approved,rejected',
+            'status' => 'sometimes|in:approved,rejected',
             'admin_notes' => 'nullable|string',
         ]);
 
@@ -65,19 +91,11 @@ class SuggestedPlaceController extends Controller
         return api_success($suggestedPlace->fresh()->load(['user', 'city']), 'تم التحديث');
     }
 
-    public function review(Request $request, SuggestedPlace $suggestedPlace)
-    {
-        $data = $request->validate([
-            'status' => 'required|in:approved,rejected',
-            'admin_notes' => 'nullable|string',
-        ]);
-
-        $suggestedPlace->update($data);
-        return api_success($suggestedPlace->fresh()->load(['user', 'city']), 'تمت مراجعة الطلب');
-    }
 
     public function destroy(SuggestedPlace $suggestedPlace)
     {
+        Gate::authorize('delete', $suggestedPlace);
+
         $suggestedPlace->delete();
         return api_success(null, 'تم الحذف');
     }

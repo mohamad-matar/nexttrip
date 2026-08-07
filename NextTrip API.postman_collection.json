@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "c818d5cb-939d-4283-a1ce-eb648cf39743",
+    "_postman_id": "42e2798b-f116-4448-a8d4-ff9c7c4d24fe",
     "name": "NextTrip API",
     "description": "API collection for NextTrip application",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -1007,12 +1007,11 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{baseUrl}}/admin/suggested-places",
+                  "raw": "{{baseUrl}}/suggested-places",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
-                    "admin",
                     "suggested-places"
                   ]
                 }
@@ -1059,6 +1058,213 @@
               "response": []
             }
           ]
+        },
+        {
+          "name": "analytics",
+          "item": [
+            {
+              "name": "إحضائيات الداش بورد",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"latitude\": 33.5138,\n  \"longitude\": 36.2765,\n  \"interests\": [\n    \"food\",\n    \"shopping\"\n  ],\n  \"budget\": 500,\n  \"season\": \"summer\",\n  \"weather\": \"sunny\",\n  \"preferred_time\": \"morning\",\n  \"preferred_activity_level\": 2,\n  \"pace\": \"relaxed\",\n  \"days\": 3\n}"
+                },
+                "url": {
+                  "raw": "{{url}}/admin/analytics",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "analytics"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "الرحلات",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/admin/trips",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "trips"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "آحر طلبات الحجز",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/admin/bookings",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "bookings"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "notifications",
+          "item": [
+            {
+              "name": "كل الإشعارات",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "Application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\" :\"noor@test.com\",\r\n    \"password\" : \"password\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{url}}/notifications",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "notifications"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "الإشعارات الجديدة",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "Application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\" :\"noor@test.com\",\r\n    \"password\" : \"password\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{url}}/notifications/unread",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "notifications",
+                    "unread"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "عدد الإشعارات الجديدة",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "Application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\" :\"noor@test.com\",\r\n    \"password\" : \"password\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{url}}/notifications/unread-count",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "notifications",
+                    "unread-count"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "تحويل الاشعارات إلى مقروءة",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "Application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\" :\"noor@test.com\",\r\n    \"password\" : \"password\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{url}}/notifications/mark-all-as-read",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "notifications",
+                    "mark-all-as-read"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
         }
       ],
       "auth": {
@@ -1066,7 +1272,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "1|ETrIbe3OwgbSK4AJt6qrnStSXGIWEdqnQfbLVeZfc55f88c9",
+            "value": "1|COOskn7esAJu0U01ig2OyQfUTvYHimBZjxziCYYtc1330298",
             "type": "string"
           }
         ]
@@ -2411,6 +2617,87 @@
           ]
         },
         {
+          "name": "AI",
+          "item": [
+            {
+              "name": "Nearby Recommendations",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"latitude\": 33.5138,\n  \"longitude\": 36.2765,\n  \"interests\": [\n    \"food\",\n    \"shopping\"\n  ],\n  \"budget\": 500,\n  \"season\": \"summer\",\n  \"weather\": \"sunny\",\n  \"preferred_time\": \"morning\",\n  \"preferred_activity_level\": \"2\",\n  \"pace\": \"relaxed\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/public/ai/nearby-recommendations",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "public",
+                    "ai",
+                    "nearby-recommendations"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Smart Trip Planner",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"latitude\": 33.5138,\n  \"longitude\": 36.2765,\n  \"interests\": [\n    \"food\",\n    \"shopping\"\n  ],\n  \"budget\": 500,\n  \"season\": \"summer\",\n  \"weather\": \"sunny\",\n  \"preferred_time\": \"morning\",\n  \"preferred_activity_level\": 2,\n  \"pace\": \"relaxed\",\n  \"days\": 3\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/public/ai/smart-trip-planner",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "public",
+                    "ai",
+                    "smart-trip-planner"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
           "name": "cities-all",
           "request": {
             "method": "GET",
@@ -2457,79 +2744,34 @@
             }
           },
           "response": []
-        },
+        }
+      ]
+    },
+    {
+      "name": "common",
+      "item": [
         {
-          "name": "AI",
+          "name": "Suggested Places",
           "item": [
             {
-              "name": "Nearby Recommendations",
+              "name": "Get All Suggested Places",
               "request": {
-                "method": "POST",
+                "method": "GET",
                 "header": [
                   {
                     "key": "Accept",
                     "value": "application/json",
                     "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
                   }
                 ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"latitude\": 33.5138,\n  \"longitude\": 36.2765,\n  \"budget\": 500,\n  \"season\": \"summer\",\n  \"weather\": \"sunny\",\n  \"preferred_time\": \"morning\",\n  \"preferred_activity_level\": \"moderate\",\n  \"pace\": \"relaxed\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
                 "url": {
-                  "raw": "{{url}}/ai/nearby-recommendations",
+                  "raw": "{{baseUrl}}/admin/suggested-places",
                   "host": [
-                    "{{url}}"
+                    "{{baseUrl}}"
                   ],
                   "path": [
-                    "ai",
-                    "nearby-recommendations"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Smart Trip Planner",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"latitude\": 33.5138,\n  \"longitude\": 36.2765,\n  \"budget\": 500,\n  \"season\": \"summer\",\n  \"weather\": \"sunny\",\n  \"preferred_time\": \"morning\",\n  \"preferred_activity_level\": \"moderate\",\n  \"pace\": \"relaxed\",\n  \"days\": 3\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{url}}/ai/smart-trip-planner",
-                  "host": [
-                    "{{url}}"
-                  ],
-                  "path": [
-                    "ai",
-                    "smart-trip-planner"
+                    "admin",
+                    "suggested-places"
                   ]
                 }
               },

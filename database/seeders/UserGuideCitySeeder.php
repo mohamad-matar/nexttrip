@@ -19,6 +19,13 @@ class UserGuideCitySeeder extends Seeder
         | 1) إنشاء المدن
         |--------------------------------------------------------------------------
         */
+        $sourcePath = database_path('seeders/images/cities');
+        $destinationPath = public_path('storage/cities');
+
+        File::ensureDirectoryExists(public_path('storage/cities'));
+
+        File::copyDirectory($sourcePath, $destinationPath);
+
         $citiesData = [
             [
                 'name' => 'دمشق',
@@ -145,8 +152,8 @@ class UserGuideCitySeeder extends Seeder
                 'daily_price' => 50,
                 'bio' => 'مرشد سياحي بخبرة 10 سنوات في دمشق القديمة.',
                 'avatar' => 'avatars/guide1.jpg',
-                
-                'cities' => [0,4], // دمشق
+
+                'cities' => [0, 4], // دمشق
             ],
             [
                 'user_index' => 4,
@@ -158,7 +165,7 @@ class UserGuideCitySeeder extends Seeder
                 'avatar' => 'avatars/guide2.jpg',
                 'cities' => [1], // حلب
             ],
-            
+
         ];
 
 
