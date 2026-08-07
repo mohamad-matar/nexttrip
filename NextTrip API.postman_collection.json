@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "b8dcb9da-7f65-439c-89bd-a9bcacf9d6d2",
+    "_postman_id": "42e2798b-f116-4448-a8d4-ff9c7c4d24fe",
     "name": "NextTrip API",
     "description": "API collection for NextTrip application",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -399,8 +399,9 @@
                 "method": "POST",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}"
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -420,7 +421,7 @@
                     },
                     {
                       "key": "name",
-                      "value": "محمية الغابات",
+                      "value": "كسب",
                       "type": "text",
                       "uuid": "dc641f2c-f2db-4bb8-9ca6-c47e3e63ffcd"
                     },
@@ -470,7 +471,25 @@
                       "key": "images[]",
                       "type": "file",
                       "uuid": "ab041224-f5f3-4bee-8f48-43b78a24680f",
-                      "src": []
+                      "src": "كسب.jpg"
+                    },
+                    {
+                      "key": "images[]",
+                      "type": "file",
+                      "uuid": "69f71faf-28bc-4285-b515-44a84bd5e688",
+                      "src": "كسب2.jpg"
+                    },
+                    {
+                      "key": "interests[]",
+                      "value": "2",
+                      "type": "text",
+                      "uuid": "e78917cc-3422-449a-9ae2-5d8022afc6f1"
+                    },
+                    {
+                      "key": "interests[]",
+                      "value": "3",
+                      "type": "text",
+                      "uuid": "89f1de03-a5ab-4e24-b9ab-abe139764f65"
                     }
                   ]
                 },
@@ -516,7 +535,7 @@
                       "key": "images[]",
                       "type": "file",
                       "uuid": "2bf1ddc7-6d9f-4d92-a0d5-bf15ce2bea9d",
-                      "src": []
+                      "value": null
                     }
                   ]
                 },
@@ -988,12 +1007,11 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{baseUrl}}/admin/suggested-places",
+                  "raw": "{{baseUrl}}/suggested-places",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
-                    "admin",
                     "suggested-places"
                   ]
                 }
@@ -1040,6 +1058,213 @@
               "response": []
             }
           ]
+        },
+        {
+          "name": "analytics",
+          "item": [
+            {
+              "name": "إحضائيات الداش بورد",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"latitude\": 33.5138,\n  \"longitude\": 36.2765,\n  \"interests\": [\n    \"food\",\n    \"shopping\"\n  ],\n  \"budget\": 500,\n  \"season\": \"summer\",\n  \"weather\": \"sunny\",\n  \"preferred_time\": \"morning\",\n  \"preferred_activity_level\": 2,\n  \"pace\": \"relaxed\",\n  \"days\": 3\n}"
+                },
+                "url": {
+                  "raw": "{{url}}/admin/analytics",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "analytics"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "الرحلات",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/admin/trips",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "trips"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "آحر طلبات الحجز",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/admin/bookings",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "bookings"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "notifications",
+          "item": [
+            {
+              "name": "كل الإشعارات",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "Application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\" :\"noor@test.com\",\r\n    \"password\" : \"password\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{url}}/notifications",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "notifications"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "الإشعارات الجديدة",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "Application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\" :\"noor@test.com\",\r\n    \"password\" : \"password\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{url}}/notifications/unread",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "notifications",
+                    "unread"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "عدد الإشعارات الجديدة",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "Application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\" :\"noor@test.com\",\r\n    \"password\" : \"password\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{url}}/notifications/unread-count",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "notifications",
+                    "unread-count"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "تحويل الاشعارات إلى مقروءة",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "Application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\" :\"noor@test.com\",\r\n    \"password\" : \"password\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{url}}/notifications/mark-all-as-read",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "notifications",
+                    "mark-all-as-read"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
         }
       ],
       "auth": {
@@ -1047,7 +1272,7 @@
         "bearer": [
           {
             "key": "token",
-            "value": "1|mucLxpQfoJOsGmOFUCLxi1AEMAQKvv3EPCSQuJco305a0183",
+            "value": "1|COOskn7esAJu0U01ig2OyQfUTvYHimBZjxziCYYtc1330298",
             "type": "string"
           }
         ]
@@ -1178,7 +1403,7 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{url}}\\register",
+                  "raw": "{{url}}/register",
                   "host": [
                     "{{url}}"
                   ],
@@ -1210,7 +1435,7 @@
                   }
                 },
                 "url": {
-                  "raw": "{{url}}\\login",
+                  "raw": "{{url}}/login",
                   "host": [
                     "{{url}}"
                   ],
@@ -1272,7 +1497,7 @@
                   "raw": "{\r\n    \"email\" :\"noor@test.com\",\r\n    \"password\" : \"password\"\r\n}"
                 },
                 "url": {
-                  "raw": "{{url}}\\me",
+                  "raw": "{{url}}/me",
                   "host": [
                     "{{url}}"
                   ],
@@ -1309,7 +1534,7 @@
                   }
                 },
                 "url": {
-                  "raw": "{{url}}\\guide/bookings/3/cancel",
+                  "raw": "{{url}}/guide/bookings/3/cancel",
                   "host": [
                     "{{url}}"
                   ],
@@ -1344,7 +1569,7 @@
                   }
                 },
                 "url": {
-                  "raw": "{{url}}\\guide/bookings/5/reject",
+                  "raw": "{{url}}/guide/bookings/5/reject",
                   "host": [
                     "{{url}}"
                   ],
@@ -1379,7 +1604,7 @@
                   }
                 },
                 "url": {
-                  "raw": "{{url}}\\guide/bookings/4/accept",
+                  "raw": "{{url}}/guide/bookings/4/accept",
                   "host": [
                     "{{url}}"
                   ],
@@ -1549,7 +1774,7 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{url}}\\guide/profile",
+                  "raw": "{{url}}/guide/profile",
                   "host": [
                     "{{url}}"
                   ],
@@ -1573,7 +1798,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{url}}\\guide/profile",
+                  "raw": "{{url}}/guide/profile",
                   "host": [
                     "{{url}}"
                   ],
@@ -1670,7 +1895,7 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{url}}\\guide/reviews",
+                  "raw": "{{url}}/guide/reviews",
                   "host": [
                     "{{url}}"
                   ],
@@ -1706,7 +1931,7 @@
                   "raw": "{\r\n    \"email\" :\"noor@test.com\",\r\n    \"password\" : \"password\"\r\n}"
                 },
                 "url": {
-                  "raw": "{{url}}\\guide/dashboard",
+                  "raw": "{{url}}/guide/dashboard",
                   "host": [
                     "{{url}}"
                   ],
@@ -1742,7 +1967,7 @@
                   "raw": "{\r\n    \"email\" :\"noor@test.com\",\r\n    \"password\" : \"password\"\r\n}"
                 },
                 "url": {
-                  "raw": "{{url}}\\notifications",
+                  "raw": "{{url}}/notifications",
                   "host": [
                     "{{url}}"
                   ],
@@ -1772,7 +1997,7 @@
                   "raw": "{\r\n    \"email\" :\"noor@test.com\",\r\n    \"password\" : \"password\"\r\n}"
                 },
                 "url": {
-                  "raw": "{{url}}\\notifications/unread",
+                  "raw": "{{url}}/notifications/unread",
                   "host": [
                     "{{url}}"
                   ],
@@ -1803,7 +2028,7 @@
                   "raw": "{\r\n    \"email\" :\"noor@test.com\",\r\n    \"password\" : \"password\"\r\n}"
                 },
                 "url": {
-                  "raw": "{{url}}\\notifications/unread-count",
+                  "raw": "{{url}}/notifications/unread-count",
                   "host": [
                     "{{url}}"
                   ],
@@ -1831,7 +2056,7 @@
                   "raw": "{\r\n    \"email\" :\"noor@test.com\",\r\n    \"password\" : \"password\"\r\n}"
                 },
                 "url": {
-                  "raw": "{{url}}\\notifications/mark-all-as-read",
+                  "raw": "{{url}}/notifications/mark-all-as-read",
                   "host": [
                     "{{url}}"
                   ],
@@ -1908,7 +2133,7 @@
                   }
                 },
                 "url": {
-                  "raw": "{{url}}\\register",
+                  "raw": "{{url}}/register",
                   "host": [
                     "{{url}}"
                   ],
@@ -1940,7 +2165,7 @@
                   }
                 },
                 "url": {
-                  "raw": "{{url}}\\login",
+                  "raw": "{{url}}/login",
                   "host": [
                     "{{url}}"
                   ],
@@ -2009,7 +2234,7 @@
                   }
                 },
                 "url": {
-                  "raw": "{{url}}\\tourist\\guide-bookings/1/book",
+                  "raw": "{{url}}/tourist/guide-bookings/1/book",
                   "host": [
                     "{{url}}"
                   ],
@@ -2044,7 +2269,7 @@
                   }
                 },
                 "url": {
-                  "raw": "{{url}}\\tourist\\guide-bookings/2/review",
+                  "raw": "{{url}}/tourist/guide-bookings/2/review",
                   "host": [
                     "{{url}}"
                   ],
@@ -2079,7 +2304,7 @@
                   }
                 },
                 "url": {
-                  "raw": "{{url}}\\tourist/guide-bookings/6/cancel",
+                  "raw": "{{url}}/tourist/guide-bookings/6/cancel",
                   "host": [
                     "{{url}}"
                   ],
@@ -2105,7 +2330,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{url}}\\tourist\\guide-bookings",
+                  "raw": "{{url}}/tourist/guide-bookings",
                   "host": [
                     "{{url}}"
                   ],
@@ -2129,7 +2354,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{url}}\\tourist\\guide-bookings\\1",
+                  "raw": "{{url}}/tourist/guide-bookings/1",
                   "host": [
                     "{{url}}"
                   ],
@@ -2159,7 +2384,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{url}}\\tourist/reviews",
+                  "raw": "{{url}}/tourist/reviews",
                   "host": [
                     "{{url}}"
                   ],
@@ -2195,7 +2420,7 @@
                   "raw": "{\r\n    \"email\" :\"noor@test.com\",\r\n    \"password\" : \"password\"\r\n}"
                 },
                 "url": {
-                  "raw": "{{url}}\\notifications",
+                  "raw": "{{url}}/notifications",
                   "host": [
                     "{{url}}"
                   ],
@@ -2225,7 +2450,7 @@
                   "raw": "{\r\n    \"email\" :\"noor@test.com\",\r\n    \"password\" : \"password\"\r\n}"
                 },
                 "url": {
-                  "raw": "{{url}}\\notifications/unread",
+                  "raw": "{{url}}/notifications/unread",
                   "host": [
                     "{{url}}"
                   ],
@@ -2256,7 +2481,7 @@
                   "raw": "{\r\n    \"email\" :\"noor@test.com\",\r\n    \"password\" : \"password\"\r\n}"
                 },
                 "url": {
-                  "raw": "{{url}}\\notifications/unread-count",
+                  "raw": "{{url}}/notifications/unread-count",
                   "host": [
                     "{{url}}"
                   ],
@@ -2284,7 +2509,7 @@
                   "raw": "{\r\n    \"email\" :\"noor@test.com\",\r\n    \"password\" : \"password\"\r\n}"
                 },
                 "url": {
-                  "raw": "{{url}}\\notifications/mark-all-as-read",
+                  "raw": "{{url}}/notifications/mark-all-as-read",
                   "host": [
                     "{{url}}"
                   ],
@@ -2352,7 +2577,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{url}}\\public/guides/2",
+                  "raw": "{{url}}/public/guides/2",
                   "host": [
                     "{{url}}"
                   ],
@@ -2392,6 +2617,87 @@
           ]
         },
         {
+          "name": "AI",
+          "item": [
+            {
+              "name": "Nearby Recommendations",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"latitude\": 33.5138,\n  \"longitude\": 36.2765,\n  \"interests\": [\n    \"food\",\n    \"shopping\"\n  ],\n  \"budget\": 500,\n  \"season\": \"summer\",\n  \"weather\": \"sunny\",\n  \"preferred_time\": \"morning\",\n  \"preferred_activity_level\": \"2\",\n  \"pace\": \"relaxed\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/public/ai/nearby-recommendations",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "public",
+                    "ai",
+                    "nearby-recommendations"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Smart Trip Planner",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"latitude\": 33.5138,\n  \"longitude\": 36.2765,\n  \"interests\": [\n    \"food\",\n    \"shopping\"\n  ],\n  \"budget\": 500,\n  \"season\": \"summer\",\n  \"weather\": \"sunny\",\n  \"preferred_time\": \"morning\",\n  \"preferred_activity_level\": 2,\n  \"pace\": \"relaxed\",\n  \"days\": 3\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/public/ai/smart-trip-planner",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "public",
+                    "ai",
+                    "smart-trip-planner"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
           "name": "cities-all",
           "request": {
             "method": "GET",
@@ -2403,7 +2709,7 @@
               }
             ],
             "url": {
-              "raw": "{{url}}\\public\\cities",
+              "raw": "{{url}}/public/cities",
               "host": [
                 "{{url}}"
               ],
@@ -2427,7 +2733,7 @@
               }
             ],
             "url": {
-              "raw": "{{url}}\\public\\languages",
+              "raw": "{{url}}/public/languages",
               "host": [
                 "{{url}}"
               ],
@@ -2438,6 +2744,40 @@
             }
           },
           "response": []
+        }
+      ]
+    },
+    {
+      "name": "common",
+      "item": [
+        {
+          "name": "Suggested Places",
+          "item": [
+            {
+              "name": "Get All Suggested Places",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/suggested-places",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "suggested-places"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
         }
       ]
     }

@@ -8,23 +8,20 @@ use App\Models\Place;
 use App\Models\SuggestedPlace;
 use App\Models\Trip;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AnalyticsController extends Controller
 {
-    public function index(Request $request)
+
+    public function index()
     {
-        $period = $request->input('period', 'month'); // week, month, year
-        
         return api_success([
             'overview' => $this->getOverviewStats(),
             'users' => $this->getUserStats(),
-            'bookings' => $this->getBookingStats($period),
             'places' => $this->getPlaceStats(),
-            'trips' => $this->getTripStats($period),
-            'revenue' => $this->getRevenueStats($period),
-            'suggested_places' => $this->getSuggestedPlacesStats(),
+            'revenue' => $this->getRevenueStats(),
+            'trips' => $this->getTripStats(),
+            'bookings' => $this->getBookingStats(),
         ]);
     }
 
@@ -44,6 +41,9 @@ class AnalyticsController extends Controller
     private function getUserStats()
     {
         return [
+            'new_users_this_month' => User::whereMonth('created_at', now()->month)
+                                        ->whereYear('created_at', now()->year)->count(),
+            'new_users_this_week' => User::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count(),
             'by_role' => [
                 'admin' => User::where('role', 'admin')->count(),
                 'guide' => User::where('role', 'guide')->count(),
@@ -53,197 +53,106 @@ class AnalyticsController extends Controller
                 'active' => User::where('status', 'active')->count(),
                 'blocked' => User::where('status', 'blocked')->count(),
                 'unavailable' => User::where('status', 'unavailable')->count(),
-            ],
-            'new_users_this_month' => User::whereMonth('created_at', now()->month)
-                ->whereYear('created_at', now()->year)
-                ->count(),
-            'new_users_this_week' => User::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
-                ->count(),
+            ],            
         ];
-    }
-
-    private function getBookingStats($period)
-    {
-        $query = GuideBooking::query();
-        
-        $startDate = match($period) {
-            'week' => now()->subWeek(),
-            'month' => now()->subMonth(),
-            'year' => now()->subYear(),
-            default => now()->subMonth(),
-        };
-
-        $bookingsInPeriod = $query->where('created_at', '>=', $startDate)->get();
-
-        return [
-            'total' => GuideBooking::count(),
-            'in_period' => $bookingsInPeriod->count(),
-            'by_status' => [
-                'pending' => GuideBooking::where('status', 'pending')->count(),
-                'accepted' => GuideBooking::where('status', 'accepted')->count(),
-                'rejected' => GuideBooking::where('status', 'rejected')->count(),
-                'completed' => GuideBooking::where('status', 'completed')->count(),
-                'cancelled' => GuideBooking::where('status', 'cancelled')->count(),
-            ],
-            'monthly_trend' => $this->getMonthlyBookingTrend(),
-            'weekly_trend' => $this->getWeeklyBookingTrend(),
-        ];
-    }
-
-    private function getMonthlyBookingTrend()
-    {
-        return GuideBooking::select(
-            DB::raw('MONTH(created_at) as month'),
-            DB::raw('YEAR(created_at) as year'),
-            DB::raw('COUNT(*) as count')
-        )
-        ->where('created_at', '>=', now()->subMonths(6))
-        ->groupBy('year', 'month')
-        ->orderBy('year', 'asc')
-        ->orderBy('month', 'asc')
-        ->get()
-        ->map(function ($item) {
-            return [
-                'month' => $item->month,
-                'year' => $item->year,
-                'count' => $item->count,
-            ];
-        });
-    }
-
-    private function getWeeklyBookingTrend()
-    {
-        return GuideBooking::select(
-            DB::raw('WEEK(created_at) as week'),
-            DB::raw('YEAR(created_at) as year'),
-            DB::raw('COUNT(*) as count')
-        )
-        ->where('created_at', '>=', now()->subWeeks(8))
-        ->groupBy('year', 'week')
-        ->orderBy('year', 'asc')
-        ->orderBy('week', 'asc')
-        ->get()
-        ->map(function ($item) {
-            return [
-                'week' => $item->week,
-                'year' => $item->year,
-                'count' => $item->count,
-            ];
-        });
     }
 
     private function getPlaceStats()
     {
         return [
+            'by_category' => Place::selectRaw('categories.name as category, COUNT(places.id) as count')
+            ->leftJoin('categories', 'places.category_id', '=', 'categories.id')
+            ->groupBy(DB::raw('categories.name')) 
+            ->toBase()
+            ->get()->toArray(),
+            
+            'by_city' => Place::selectRaw('cities.name as city, COUNT(places.id) as count')
+            ->leftJoin('cities', 'places.city_id', '=', 'cities.id')
+            ->groupBy(DB::raw('cities.name'))
+            ->toBase()
+            ->get()->toArray(),
+            
             'total' => Place::count(),
-            'by_category' => Place::select('category_id')
-                ->selectRaw('COUNT(*) as count')
-                ->with('category:id,name')
-                ->groupBy('category_id')
-                ->get()
-                ->map(function ($item) {
-                    return [
-                        'category' => $item->category?->name ?? 'غير مصنف',
-                        'count' => $item->count,
-                    ];
-                }),
-            'by_city' => Place::select('city_id')
-                ->selectRaw('COUNT(*) as count')
-                ->with('city:id,name')
-                ->groupBy('city_id')
-                ->get()
-                ->map(function ($item) {
-                    return [
-                        'city' => $item->city?->name ?? 'غير مصنف',
-                        'count' => $item->count,
-                    ];
-                }),
-            'average_rating' => Place::avg('average_rating') ?? 0,
-            'total_reviews' => Place::sum('reviews_count') ?? 0,
+            'average_rating' => (float) (Place::avg('average_rating') ?? 0),
+            'reviews_count' => (int) (Place::sum('reviews_count') ?? 0),
         ];
     }
 
-    private function getTripStats($period)
+    private function getRevenueStats()
     {
-        $startDate = match($period) {
-            'week' => now()->subWeek(),
-            'month' => now()->subMonth(),
-            'year' => now()->subYear(),
-            default => now()->subMonth(),
-        };
+        $startDate = now()->subMonths(11)->startOfMonth();
+        // إنشاء نسخة من الاستعلام الأساسي للحسابات السريعة لعدم التكرار
+        $baseQuery = GuideBooking::where('status', 'completed');
 
         return [
-            'total' => Trip::count(),
-            'in_period' => Trip::where('created_at', '>=', $startDate)->count(),
-            'monthly_trend' => Trip::select(
-                DB::raw('MONTH(created_at) as month'),
-                DB::raw('YEAR(created_at) as year'),
-                DB::raw('COUNT(*) as count')
-            )
-            ->where('created_at', '>=', now()->subMonths(6))
-            ->groupBy('year', 'month')
-            ->orderBy('year', 'asc')
-            ->orderBy('month', 'asc')
+            'total_revenue' => (float) ($baseQuery->sum('total_price') * 0.1 ?? 0),
+            'last_year_revenue' => (float) ($baseQuery->where('created_at', '>=', $startDate)->sum('total_price') * 0.1 ?? 0),
+            'average_booking_value' => (float) ($baseQuery->avg('total_price') ?? 0),
+        ];
+    }
+
+    private function getBookingStats()
+    {
+
+        $dbData = GuideBooking::selectRaw('MONTH(created_at) as month, YEAR(created_at) as year, COUNT(*) as count')
+            ->where('created_at', '>=', now()->subMonths(11)->startOfMonth()) // تغطية الستة أشهر الحالية بالكامل
+            ->groupBy(DB::raw('YEAR(created_at)'), DB::raw('MONTH(created_at)'))
+            ->toBase()
             ->get()
-            ->map(function ($item) {
-                return [
-                    'month' => $item->month,
-                    'year' => $item->year,
-                    'count' => $item->count,
-                ];
-            }),
-        ];
+            ->mapWithKeys(function ($item) {
+                // إنشاء مفتاح فريد لسهولة الدمج اللاحق مثل: "2026-3"
+                return ["{$item->year}-{$item->month}" => $item->count];
+            })->toArray();
+
+        $chart = [];
+
+        // 2. توليد الأشهر الستة الماضية بدقة وبناء الهيكل المتناسق مع اسم الشهر
+        for ($i = 11; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $year = $date->year;
+            $month = $date->month;
+            $key = "{$year}-{$month}";
+
+            $chart[] = [
+                'month' => $month,
+                'year' => $year,
+                'count' => $dbData[$key] ?? 0, // إذا لم يكن هناك حجوزات، نضع القيمة 0 تلقائياً
+            ];
+        }
+
+        return  $chart;
     }
 
-    private function getRevenueStats($period)
-    {
-        $startDate = match($period) {
-            'week' => now()->subWeek(),
-            'month' => now()->subMonth(),
-            'year' => now()->subYear(),
-            default => now()->subMonth(),
-        };
 
-        $bookings = GuideBooking::where('status', 'completed')
-            ->where('created_at', '>=', $startDate);
-
-        return [
-            'total_revenue' => $bookings->sum('total_price') ?? 0,
-            'in_period' => $bookings->where('created_at', '>=', $startDate)->sum('total_price') ?? 0,
-            'average_booking_value' => $bookings->avg('total_price') ?? 0,
-            'monthly_revenue' => GuideBooking::select(
-                DB::raw('MONTH(created_at) as month'),
-                DB::raw('YEAR(created_at) as year'),
-                DB::raw('SUM(total_price) as revenue')
-            )
-            ->where('status', 'completed')
-            ->where('created_at', '>=', now()->subMonths(6))
-            ->groupBy('year', 'month')
-            ->orderBy('year', 'asc')
-            ->orderBy('month', 'asc')
+    private function getTripStats()
+    {        
+        // جلب البيانات الخام للرحلات من قاعدة البيانات لمنع تكرار الشهور الناقصة
+        $dbData = Trip::selectRaw('MONTH(created_at) as month, YEAR(created_at) as year, COUNT(*) as count')
+            ->where('created_at', '>=', now()->subMonths(11)->startOfMonth())
+            ->groupBy(DB::raw('YEAR(created_at)'), DB::raw('MONTH(created_at)'))
+            ->toBase()
             ->get()
-            ->map(function ($item) {
-                return [
-                    'month' => $item->month,
-                    'year' => $item->year,
-                    'revenue' => $item->revenue ?? 0,
-                ];
-            }),
-        ];
+            ->mapWithKeys(function ($item) {
+                return ["{$item->year}-{$item->month}" => $item->count];
+            })->toArray();
+
+        $chart = [];
+
+        // ملء الأشهر الستة الماضية لضمان تجانس الشارت
+        for ($i =  11; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $year = $date->year;
+            $month = $date->month;
+            $key = "{$year}-{$month}";
+
+            $chart[] = [
+                'month' => $month,
+                'month_name' => $date->translatedFormat('F'),
+                'year' => $year,
+                'count' => $dbData[$key] ?? 0,
+            ];
+        }
+        return $chart;
     }
 
-    private function getSuggestedPlacesStats()
-    {
-        return [
-            'total' => SuggestedPlace::count(),
-            'by_status' => [
-                'pending' => SuggestedPlace::where('status', 'pending')->count(),
-                'approved' => SuggestedPlace::where('status', 'approved')->count(),
-                'rejected' => SuggestedPlace::where('status', 'rejected')->count(),
-            ],
-            'pending_this_week' => SuggestedPlace::where('status', 'pending')
-                ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
-                ->count(),
-        ];
-    }
 }

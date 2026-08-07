@@ -31,7 +31,7 @@ class PlaceController extends Controller
             'cost' => 'nullable|numeric',
             'expected_duration_minutes' => 'nullable|integer',
             'activity_level' => 'nullable|in:relax,sensible,vigour',
-            'is_outdoor' => 'boolean',
+            // 'is_outdoor' => 'boolean',
             'best_seasons' => 'nullable|array',
             'recommended_times' => 'nullable|array',
             'opening_hours' => 'nullable|array',
@@ -70,16 +70,34 @@ class PlaceController extends Controller
             'category_id' => 'sometimes|required|exists:categories,id',
             'name' => 'sometimes|required|string|max:191',
             'description' => 'nullable|string',
+            'phone' => 'nullable|string',
+            'address' => 'nullable|string',
+            'cost' => 'nullable|numeric',
+            'expected_duration_minutes' => 'nullable|integer',
+            'activity_level' => 'nullable|in:relax,sensible,vigour',
+            'is_outdoor' => 'boolean',
+            'best_seasons' => 'nullable|array',
+            'recommended_times' => 'nullable|array',
+            'opening_hours' => 'nullable|array',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
+            'images_to_delete' => 'nullable|array',
+            'images_to_delete.*' => 'integer',
             'interests' => 'nullable|array',
             'interests.*' => 'exists:interests,id',
         ]);
 
         $place->update($data);
 
+        if ($request->has('images_to_delete')) {
+            $ids = collect($request->input('images_to_delete'))->map(fn($id) => (int) $id)->all();
+            $place->images()->whereIn('id', $ids)->delete();
+        }
+
         if ($request->hasFile('images')) {
-            $order = 1;
+            $order = $place->images()->max('order') + 1;
             foreach ($request->file('images') as $image) {
                 $path = $image->store('places', 'public');
                 $place->images()->create([

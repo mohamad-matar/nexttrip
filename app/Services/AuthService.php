@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Enums\UserRole;
 use App\Models\Guide;
 use App\Models\User;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -39,7 +40,7 @@ class AuthService
                     'avatar'        => $avatarPath,
                 ]);
 
-                if ($data['languages']??null){
+                if ($data['languages'] ?? null) {
                     $guide->languages()->attach($data['languages']);
                 }
             }
@@ -57,12 +58,22 @@ class AuthService
     {
         $user = User::where('email', $data['email'])->first();
 
-        if ($user && ($user->status ===  \App\Enums\UserStatus::Blocked || $user->status === \App\Enums\UserStatus::Closed) ) {
+        if ($user && ($user->status ===  \App\Enums\UserStatus::Blocked || $user->status === \App\Enums\UserStatus::Closed)) {
             throw ValidationException::withMessages([
                 'email' => ['الحساب ' . $user->status->label()],
             ]);
         }
-        
+
+        if ($user && in_array($user->status, [\App\Enums\UserStatus::Blocked, \App\Enums\UserStatus::Closed])) {
+            throw new HttpResponseException(response()->json([
+                'message' => 'تعذر تسجيل الدخول. يرجى التواصل مع الدعم الفني.',
+                'errors' => [
+                    'auth' => ['الحساب غير نشط أو تم إغلاقه.']
+                ]
+            ], 403));
+        }
+
+
         if (!$user || !Hash::check($data['password'], $user->password)) {
             throw ValidationException::withMessages([
                 'email' => ['بيانات التوثق غير صحيحة'],
