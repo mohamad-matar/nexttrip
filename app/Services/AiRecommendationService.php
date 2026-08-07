@@ -7,7 +7,7 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 
 class AiRecommendationService
-{
+{   
     public function nearbyRecommendations(array $payload): array
     {
         return $this->post('/api/ai/nearby-recommendations', $payload);

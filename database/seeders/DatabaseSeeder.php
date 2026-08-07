@@ -28,6 +28,9 @@ class DatabaseSeeder extends Seeder
             
             GuideLanguageSeeder::class,
             BookingAndLogِsAndReviewsSeeder::class,
+
+            InterestUserSeeder::class,
+
         ]);
         /** places */
         $this->call([
@@ -36,16 +39,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         /** trips */
-        // $this->call([
-        //     TripSeeder::class,
-        //     TripCitySeeder::class,
-        //     TripPlaceSeeder::class,
-        // ]);
+        $this->call([
+            TripSeeder::class,
+            TripPlaceSeeder::class,
+            PlaceReviewSeeder::class,
+        ]);
 
-        /** tourists related data */
-        // $this->call([
-        //     PlaceReviewSeeder::class,
-        //     InterestUserSeeder::class,
-        // ]);        
     }
 }

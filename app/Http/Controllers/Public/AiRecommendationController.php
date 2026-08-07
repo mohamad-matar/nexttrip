@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Tourist;
+namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Services\AiRecommendationService;

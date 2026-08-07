@@ -1,9 +1,11 @@
 <?php
 
-use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\AuthController;
 
 use App\Http\Controllers\Public\GuideController;
+use App\Http\Controllers\Public\AiRecommendationController;
+use App\Http\Controllers\Public\LookupController;
+use App\Http\Controllers\Public\MapPlaceController;
 
 use App\Http\Controllers\Guide\GuideDashboardController;
 use App\Http\Controllers\Guide\BookingController;
@@ -12,17 +14,15 @@ use App\Http\Controllers\Guide\ReviewController;
 
 use App\Http\Controllers\Tourist\GuideBookingController as TouristGuideBookingController;
 use App\Http\Controllers\Tourist\ReviewController as TouristReviewController;
-use App\Http\Controllers\Tourist\AiRecommendationController;
+use App\Http\Controllers\Tourist\TripPlaceController;
 
+
+use App\Http\Controllers\Admin\CategoryController;
 
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\Public\LookupController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-
-use App\Http\Controllers\Public\MapPlaceController;
-use App\Http\Controllers\Tourist\TripPlaceController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -47,6 +47,11 @@ Route::prefix('public')->group(function () {
     Route::get('/places/{place}', [MapPlaceController::class, 'show']);
     
     Route::get('/categories', [CategoryController::class, 'index']);
+
+    Route::prefix('ai')->group(function () {
+            Route::post('/nearby-recommendations', [AiRecommendationController::class, 'nearbyRecommendations']);
+            Route::post('/smart-trip-planner', [AiRecommendationController::class, 'smartTripPlanner']);
+        });
 });
 
 Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(function () {
@@ -64,6 +69,9 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     Route::patch('suggested-places/{suggestedPlace}/status', [\App\Http\Controllers\SuggestedPlaceController::class, 'updateStatus']);
 
     Route::get('analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index']);
+
+    Route::get('bookings', [\App\Http\Controllers\Admin\BookingController::class, 'index']);
+    Route::get('bookings/{booking}', [\App\Http\Controllers\Admin\BookingController::class, 'show']);
 });
 
 Route::middleware(['auth:sanctum', 'role:guide,tourist'])->post('suggested-places', [\App\Http\Controllers\SuggestedPlaceController::class, 'store']);
@@ -97,13 +105,7 @@ Route::middleware(['auth:sanctum', 'role:tourist'])
         Route::post('/guide-bookings/{booking}/cancel', [TouristGuideBookingController::class, 'cancel']);
         Route::post('/guide-bookings/{booking}/review', [TouristGuideBookingController::class, 'review']);
 
-        Route::get('/reviews', [TouristReviewController::class, 'index']);
-
-
-        Route::prefix('ai')->group(function () {
-            Route::post('/nearby-recommendations', [AiRecommendationController::class, 'nearbyRecommendations']);
-            Route::post('/smart-trip-planner', [AiRecommendationController::class, 'smartTripPlanner']);
-        });
+        Route::get('/reviews', [TouristReviewController::class, 'index']);        
 
         Route::get('/trips', [TripPlaceController::class, 'trips']);
         Route::post('/trips/{trip}/places', [TripPlaceController::class, 'store']);
