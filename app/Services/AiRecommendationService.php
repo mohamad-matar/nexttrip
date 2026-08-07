@@ -31,10 +31,12 @@ class AiRecommendationService
         } catch (ConnectionException) {
             abort(503, 'AI service is not available. Make sure the Python service is running.');
         } catch (RequestException $exception) {
-            abort(
-                $exception->response?->status() ?: 502,
-                $exception->response?->json('detail') ?: 'AI service request failed.'
-            );
+            $detail = $exception->response?->json('detail');
+            $message = $detail
+                ? "AI service request failed: {$detail}"
+                : 'AI service request failed.';
+
+            abort($exception->response?->status() ?: 502, $message);
         }
     }
 }

@@ -30,7 +30,6 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-
 Route::controller(AuthController::class)->group(function () {
     Route::post('register',   'register');
     Route::post('login',   'login');
@@ -47,8 +46,13 @@ Route::prefix('public')->group(function () {
 
     Route::get('/places', [MapPlaceController::class, 'index']);
     Route::get('/places/{place}', [MapPlaceController::class, 'show']);
-    
+
     Route::get('/categories', [CategoryController::class, 'index']);
+
+    Route::prefix('ai')->group(function () {
+        Route::post('/nearby-recommendations', [AiRecommendationController::class, 'nearbyRecommendations']);
+        Route::post('/smart-trip-planner', [AiRecommendationController::class, 'smartTripPlanner']);
+    });
 });
 
 Route::prefix('internal/ai')->group(function () {
@@ -105,15 +109,8 @@ Route::middleware(['auth:sanctum', 'role:tourist'])
 
         Route::get('/reviews', [TouristReviewController::class, 'index']);
 
-
-        Route::prefix('ai')->group(function () {
-            Route::post('/nearby-recommendations', [AiRecommendationController::class, 'nearbyRecommendations']);
-            Route::post('/smart-trip-planner', [AiRecommendationController::class, 'smartTripPlanner']);
-        });
-
         Route::get('/trips', [TripPlaceController::class, 'trips']);
         Route::post('/trips/{trip}/places', [TripPlaceController::class, 'store']);
-
     });
 
 //الاشعارات

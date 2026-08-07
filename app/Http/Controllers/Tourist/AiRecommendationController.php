@@ -28,6 +28,7 @@ class AiRecommendationController extends Controller
     {
         $payload = $request->validate($this->baseRules() + [
             'days' => ['required', 'integer', 'min:1', 'max:14'],
+            'start_date' => ['sometimes', 'nullable', 'date'],
         ]);
 
         return api_success(
