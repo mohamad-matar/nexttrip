@@ -14,6 +14,7 @@ use App\Http\Controllers\Guide\ReviewController;
 
 use App\Http\Controllers\Tourist\GuideBookingController as TouristGuideBookingController;
 use App\Http\Controllers\Tourist\ReviewController as TouristReviewController;
+use App\Http\Controllers\Tourist\TouristPlaceReviewController;
 use App\Http\Controllers\Tourist\TripPlaceController;
 use App\Http\Controllers\Tourist\TouristInterestController;
 
@@ -26,6 +27,7 @@ use App\Http\Controllers\Admin\PlaceController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
+use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SuggestedPlaceController;
 
@@ -51,7 +53,7 @@ Route::prefix('public')->group(function () {
     Route::get('/languages', [LookupController::class, 'languages']);
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/interests', [InterestController::class, 'index']);
-    
+
     Route::get('/guides', [GuideController::class, 'index']);
     Route::get('/guides/{guide}', [GuideController::class, 'show']);
 
@@ -88,6 +90,12 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
 
     Route::get('bookings', [AdminBookingController::class, 'index']);
     Route::get('bookings/{booking}', [AdminBookingController::class, 'show']);
+
+    Route::get('reviews/guides', [AdminReviewController::class, 'guideReviews']);
+    Route::get('reviews/guides/{bookingReview}', [AdminReviewController::class, 'showGuideReview']);
+
+    Route::get('reviews/places', [AdminReviewController::class, 'placeReviews']);
+    Route::get('reviews/places/{place}', [AdminReviewController::class, 'showPlaceReview']);
 });
 
 Route::middleware(['auth:sanctum', 'role:guide'])
@@ -120,6 +128,10 @@ Route::middleware(['auth:sanctum', 'role:tourist'])
         Route::post('/guide-bookings/{booking}/review', [TouristGuideBookingController::class, 'review']);
 
         Route::get('/reviews', [TouristReviewController::class, 'index']);
+
+        // تقييمات الأماكن الخاصة بالسائح
+        Route::get('/place-reviews', [TouristPlaceReviewController::class, 'index']);
+        Route::post('/places/{place}/review', [TouristPlaceReviewController::class, 'store']);
 
         Route::get('/trips', [TripPlaceController::class, 'trips']);
         Route::post('/trips/{trip}/places', [TripPlaceController::class, 'store']);

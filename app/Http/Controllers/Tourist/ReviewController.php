@@ -34,6 +34,20 @@ class ReviewController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        // تحويل avatar الخاص بالمرشد إلى رابط كامل حتى يظهر في التطبيق
+        $host = request()->getSchemeAndHttpHost();
+        $baseStorage = $host . '/storage/';
+
+        $reviews->transform(function ($review) use ($baseStorage) {
+            $guide = $review->booking->guide ?? null;
+            if ($guide) {
+                $guide->avatar = !empty($guide->avatar)
+                    ? $baseStorage . ltrim($guide->avatar, '/')
+                    : $baseStorage . 'avatars/no-image.png';
+            }
+            return $review;
+        });
+
         return api_success($reviews);
     }
 }

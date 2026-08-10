@@ -13,7 +13,7 @@ class GuideDashboardResource extends JsonResource
         return [
             'guide' => [
                 'name'   => $guide->user->name,
-                'avatar' => asset("storage/" . ($guide->avatar?? "avatars/no-image.png")),
+                'avatar' =>  $guide->avatar,
                 'rating' => round($guide->reviews()->avg('rating') ?? 0, 1),
                 'role'   => 'مرشد سياحي',
             ],

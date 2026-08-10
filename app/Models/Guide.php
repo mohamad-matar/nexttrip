@@ -7,6 +7,7 @@ use App\Exceptions\BadDataException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -24,6 +25,12 @@ class Guide extends Model
     protected $casts = [
         // 'average_rating' => 'float',
     ];
+    protected function avatar():Attribute
+    {
+        return Attribute::make(get: function ($value) {
+           return asset("storage/avatars/" . ($value?? "no-image.png"));
+        });
+    }
 
     public function user(): BelongsTo
     {
@@ -54,8 +61,12 @@ class Guide extends Model
     public function scopeFilter(Builder $query, array $filters): Builder
     {
         return $query
-            // فلترة المدينة (M-M)
+        // فلترة المدينة (M-M)
             ->when($filters['cities'] ?? null, function ($q, $cities) {
+                // دعم القيم المفصولة بفاصلة (قادمة من الموبايل)
+                if (is_string($cities)) {
+                    $cities = array_filter(array_map('trim', explode(',', $cities)));
+                }
                 //أحضر فقط المرشدين الذين لهم مدينة موافقة للمدن المطلوبة
                 $q->whereHas('cities', function ($q2) use ($cities) {
                     is_array($cities)
@@ -66,6 +77,10 @@ class Guide extends Model
 
             // فلترة اللغات (M-M)
             ->when($filters['languages'] ?? null, function ($q, $lang) {
+                // دعم القيم المفصولة بفاصلة (قادمة من الموبايل)
+                if (is_string($lang)) {
+                    $lang = array_filter(array_map('trim', explode(',', $lang)));
+                }
                 $q->whereHas('languages', function ($q2) use ($lang) {
                     is_array($lang)
                         ? $q2->whereIn('languages.id', $lang)
@@ -89,12 +104,13 @@ class Guide extends Model
                 }
             })
 
-            // الترتيب
+// الترتيب
             ->when($filters['sort'] ?? null, function ($q, $sort) {
                 return match ($sort) {
                     'price_asc'  => $q->orderBy('daily_price', 'asc'),
                     'price_desc' => $q->orderBy('daily_price', 'desc'),
-                    'rating'     => $q->orderBy('rating_avg', 'desc'),
+                    'rating', 'rating_desc' => $q->orderBy('reviews_avg_rating', 'desc'),
+                    'rating_asc' => $q->orderBy('reviews_avg_rating', 'asc'),
                     default      => $q->latest(),
                 };
             });

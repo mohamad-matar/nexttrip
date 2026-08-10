@@ -37,7 +37,7 @@ class AuthService
                     'DOB'           => $data['DOB'],
                     'daily_price' => $data['daily_price'],
                     'bio'           => $data['bio'],
-                    'avatar'        => $avatarPath,
+                    'avatar'        => basename($avatarPath),
                 ]);
 
                 if ($data['languages'] ?? null) {
