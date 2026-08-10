@@ -4,18 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 #[Fillable(['name', 'description', 'image'])]
 class City extends Model
 {
-    protected $appends = ['image_url'];
-
-    public function getImageUrlAttribute(): ?string
+    protected function image(): Attribute
     {
-        if (empty($this->image)) {
-            return null;
-        }   
-        return asset('storage/cities/' . $this->image);
+        return Attribute::make(
+            get: function ($value) {
+                if ($value == null) {
+                    return null;
+                }
+                return asset(asset('storage/cities/' . $value));
+            }
+        );
     }
 
     public function places()

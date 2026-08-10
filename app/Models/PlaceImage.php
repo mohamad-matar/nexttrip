@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 #[Fillable([
     'place_id',
@@ -14,13 +15,14 @@ class PlaceImage extends Model
 {
     protected $appends = ['image_url_full'];
 
-    public function getImageUrlFullAttribute(): ?string
+    protected function imageUrlFull(): Attribute
     {
-        if (empty($this->image_url)) {
-            return null;
-        }
-
-        return asset('storage/places/' . $this->image_url);
+        return Attribute::make(function () {
+            if (empty($this->image_url)) {
+                return null;
+            }
+            return asset('storage/places/' . $this->image_url);
+        });
     }
 
     public function place()

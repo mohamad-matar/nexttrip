@@ -14,12 +14,12 @@ class GuideBookingResource extends JsonResource
         $today = Carbon::today();
 
         return [
-'booking_id'    => $this->id,
+            'booking_id'    => $this->id,
             'guide_id'      => $this->guide_id,
             'tourist_name' => $this->whenLoaded('tourist', fn() => $this->tourist->name),
 
             'guide_name'    => $this->guide->user->name,
-            'guide_avatar' =>  asset('storage/' . ($this->guide->avatar ??  "no-image.png")),
+            'guide_avatar' =>  $this->guide->avatar,
 
             'start_date' => $this->start_date,
             'day_count' => $this->day_count,
@@ -33,7 +33,7 @@ class GuideBookingResource extends JsonResource
                 'created_at' => $this->review->created_at,
             ] : null,
 
-'can_tourist_cancel' =>
+            'can_tourist_cancel' =>
             in_array($this->status, [GuideBookingStatus::Pending, GuideBookingStatus::Accepted]) &&
                 $today->diffInDays($startDate, false) >= 7,
 
@@ -41,8 +41,8 @@ class GuideBookingResource extends JsonResource
             $this->status === GuideBookingStatus::Completed &&                   // الرحلة انتهت
                 !$this->review,               // لم يتم تقييمها سابقاً
 
-            'can_guide_cancel' => $this->status === GuideBookingStatus::Accepted,             
-            'can_guide_react' => $this->status === GuideBookingStatus::Pending,             
+            'can_guide_cancel' => $this->status === GuideBookingStatus::Accepted,
+            'can_guide_react' => $this->status === GuideBookingStatus::Pending,
 
             'logs'        => $this->whenLoaded('logs'),
             'created_at' => $this->created_at?->format('Y-m-d'),

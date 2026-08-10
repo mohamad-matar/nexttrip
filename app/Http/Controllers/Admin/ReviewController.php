@@ -121,9 +121,9 @@ class ReviewController extends Controller
         ]);
     }
 
-    public function showPlaceReview(Place $place)
+    public function showPlaceReview(PlaceReview $placeReview)
     {
-        $review = PlaceReview::load([
+        $review = $placeReview->load([
             'place:id,city_id,category_id,name,description,average_rating,reviews_count',
             'place.city:id,name',
             'place.category:id,name',

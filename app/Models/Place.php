@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
-
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 #[Fillable([
     'city_id',
@@ -27,7 +27,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 ])]
 class Place extends Model
 {
-    protected $appends = ['image_url'];
+     protected $appends = ['image'];
 
     protected $casts = [
         'best_seasons' => \App\Casts\FlexibleJsonCast::class,
@@ -35,13 +35,15 @@ class Place extends Model
         'opening_hours' => 'array',
     ];
 
-    public function getImageUrlAttribute(): ?string
+    protected function image(): Attribute
     {
-        $firstImage = $this->images->where('order', 1)->first();
-        if ($firstImage && !empty($firstImage->image_url)) {
-            return asset('storage/places/' . $firstImage->image_url);
-        }
-        return null;
+        return Attribute::make(function () {
+            $firstImage = $this->images()->orderBy('order')->first();
+            if ($firstImage && !empty($firstImage->image_url)) {
+                return asset('storage/places/' . $firstImage->image_url);
+            }
+            return null;
+        });
     }
 
 
@@ -64,7 +66,7 @@ class Place extends Model
     {
         return $this->hasMany(PlaceReview::class);
     }
-    
+
     public function category()
     {
         return $this->belongsTo(Category::class);

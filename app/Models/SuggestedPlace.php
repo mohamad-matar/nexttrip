@@ -52,21 +52,7 @@ class SuggestedPlace extends Model
             }
         );
     }
-
-    // protected function imageUrls(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: function () {
-    //             $images = $this->images ?? [];
-    //             if (! is_array($images) || empty($images)) {
-    //                 return [];
-    //             }
-
-    //             return array_map(fn ($image) => asset('storage/suggested/' . $image), $images);
-    //         }
-    //     );
-    // }
-
+   
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -18,19 +18,12 @@ class TouristPlaceReviewController extends Controller
         $tourist = Auth::user();
 
         $reviews = PlaceReview::with([
-            'place:id,city_id,category_id,name,average_rating,reviews_count',
+            'place:id,city_id,category_id,name',
             'place.city:id,name',
-            'place.images:id,place_id,image_url,order',
         ])
             ->where('user_id', $tourist->id)
             ->orderBy('created_at', 'desc')
-            ->get();
-
-        // إضافة رابط الصورة كاملة لكل تقييم
-        $reviews->transform(function ($review) {
-            $review->place_image = $review->place ? $review->place->image_url : null;
-            return $review;
-        });
+            ->get();        
 
         return api_success($reviews);
     }
