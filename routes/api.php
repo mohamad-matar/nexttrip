@@ -121,18 +121,20 @@ Route::middleware(['auth:sanctum', 'role:tourist'])
     ->prefix('tourist')
     ->group(function () {
         Route::get('/guide-bookings/reviews', [TouristGuideBookingController::class, 'reviews']);
-        
+
         Route::get('/guide-bookings', [TouristGuideBookingController::class, 'index']);
         Route::get('/guide-bookings/{booking}', [TouristGuideBookingController::class, 'show']);
         Route::post('/guide-bookings/{guide}/book', [TouristGuideBookingController::class, 'book']);
         Route::post('/guide-bookings/{booking}/cancel', [TouristGuideBookingController::class, 'cancel']);
-        
+
         Route::post('/guide-bookings/{booking}/review', [TouristGuideBookingController::class, 'review']);
 
         Route::get('/places/reviews', [TouristPlaceReviewController::class, 'index']);
         Route::post('/places/{place}/review', [TouristPlaceReviewController::class, 'store']);
 
         Route::get('/trips', [TripPlaceController::class, 'trips']);
+        Route::post('/trips', [TripPlaceController::class, 'createTrip']);
+        Route::get('/trips/{trip}', [TripPlaceController::class, 'show']);
         Route::post('/trips/{trip}/places', [TripPlaceController::class, 'store']);
 
         Route::get('/interests', [TouristInterestController::class, 'index']);
