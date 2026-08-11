@@ -6,6 +6,7 @@ use App\Models\City;
 use App\Models\SuggestedPlace;
 use App\Models\User;
 use App\Notifications\SuggestedPlaceSubmittedNotification;
+use App\Notifications\SuggestedPlaceReviewedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -88,6 +89,18 @@ class SuggestedPlaceController extends Controller
         ]);
 
         $suggestedPlace->update($data);
+
+        // إرسال إشعار للمستخدم الذي قدم الاقتراح
+        if (isset($data['status']) && $suggestedPlace->user) {
+            $suggestedPlace->user->notify(new SuggestedPlaceReviewedNotification(
+                $suggestedPlace->id,
+                $suggestedPlace->name,
+                $suggestedPlace->city?->name,
+                $data['status'],
+                $data['admin_notes'] ?? null
+            ));
+        }
+
         return api_success($suggestedPlace->fresh()->load(['user', 'city']), 'تم التحديث');
     }
 

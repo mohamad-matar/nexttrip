@@ -36,10 +36,11 @@ class AiRecommendationController extends Controller
 
         $plan = $this->aiRecommendationService->smartTripPlanner($payload);
 
-        // حفظ الخطة 
-        $user = Auth::guard('sanctum')->user();
+        // حفظ الخطة في حال كان منشئ الخطة سائح وليس ضيف
+        $user = Auth::user();
+        
         $trip = ($user instanceof User && $user->isTourist())
-            ? $this->storeAiTrip($user, $payload, $plan)
+            ? $this->storeAiTrip( $payload, $plan)
             : null;
 
         return api_success([
@@ -49,26 +50,25 @@ class AiRecommendationController extends Controller
         ], 'AI smart trip plan');
     }
 
-    private function storeAiTrip(User $user, array $payload, array $plan): Trip
+    private function storeAiTrip( array $payload, array $plan): Trip
     {
+        $tourist_id  = Auth::id();
         $summary = $plan['summary'] ?? [];
         $planDays = $plan['days'] ?? [];
 
         $startDate = $summary['start_date'] ?? $payload['start_date'] ?? now()->toDateString();
-        $endDate = $summary['end_date'] ?? null;
         $days = $summary['days'] ?? $payload['days'] ?? 1;
         $totalCost = $summary['total_cost'] ?? 0;
 
         $trip = Trip::create([
-            'user_id' => $user->id,
-            'title' => 'خطة سفر ذكية - '.$startDate,
+            'user_id' => $tourist_id,
+            
+            'title' => !empty($payload['title']) ? $payload['title'] : 'خطة سفر ذكية - '.$startDate,
+            'start_date' => $startDate,
+            'day_count' => $days,
             'budget_max' => $payload['budget'] ?? null,
             'trip_pace' => $this->mapPace($payload['pace'] ?? 'medium'),
             'preferred_activity_level' => $this->mapActivityLevel($payload['preferred_activity_level'] ?? 2),
-            'day_count' => $days,
-            'start_date' => $startDate,
-            'end_date' => $endDate,
-            'total_cost' => $totalCost,
             'total_estimated_cost' => $totalCost,
             'source' => 'ai',
             'ai_payload' => $payload,
@@ -116,6 +116,7 @@ class AiRecommendationController extends Controller
     private function baseRules(): array
     {
         return [
+            'title' => ['nullable', 'string', 'max:191'],
             'latitude' => ['required', 'numeric', 'between:-90,90'],
             'longitude' => ['required', 'numeric', 'between:-180,180'],
             'interests' => ['required', 'array', 'min:1'],
