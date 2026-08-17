@@ -28,7 +28,7 @@ class Guide extends Model
     protected function avatar():Attribute
     {
         return Attribute::make(get: function ($value) {
-           return asset("storage/avatars/" . ($value?? "no-image.png"));
+           return asset("storage/" . ($value?? "no-image.png"));
         });
     }
 

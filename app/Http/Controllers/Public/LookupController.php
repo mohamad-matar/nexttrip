@@ -35,6 +35,6 @@ class LookupController extends Controller
             ->limit(10)
             ->get();
 
-        return api_success($places, "أكثر الأماكن زيارة");
+        return api_success(data: $places, message: "أكثر الأماكن زيارة");
     }
 }
