@@ -1,26 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Public;
+namespace App\Http\Controllers\Tourist;
 
 use App\Http\Controllers\Controller;
 use App\Services\AiRecommendationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AiRecommendationController extends Controller
 {
     public function __construct(private readonly AiRecommendationService $aiRecommendationService) {}
-
-    public function nearbyRecommendations(Request $request)
-    {
-        $payload = $request->validate($this->baseRules() + [
-            'limit' => ['sometimes', 'integer', 'min:1', 'max:100'],
-        ]);
-
-        return api_success(
-            $this->aiRecommendationService->nearbyRecommendations($payload),
-            'AI nearby recommendations'
-        );
-    }
+    
 
     public function smartTripPlanner(Request $request)
     {
@@ -29,9 +19,9 @@ class AiRecommendationController extends Controller
             'start_date' => ['sometimes', 'nullable', 'date'],
         ]);
 
-        $data = $this->aiRecommendationService->smartTripPlanner($payload , false);
+        $data = $this->aiRecommendationService->smartTripPlanner($payload , true);
 
-        return api_success(data:  $data, message: 'AI smart trip plan');
+        return api_success(data:  $data, message: 'AI smart trip plan');        
     }
     
     private function baseRules(): array

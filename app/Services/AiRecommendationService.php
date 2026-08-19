@@ -2,8 +2,12 @@
 
 namespace App\Services;
 
+use App\Http\Resources\TripResource;
+use App\Models\Trip;
+use App\Models\TripPlace;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
 class AiRecommendationService
@@ -13,9 +17,15 @@ class AiRecommendationService
         return $this->post('/api/ai/nearby-recommendations', $payload);
     }
 
-    public function smartTripPlanner(array $payload): array
+    public function smartTripPlanner(array $payload , bool $save): array
     {
-        return $this->post('/api/ai/smart-trip-planner', $payload);
+        $plan =  $this->post('/api/ai/smart-trip-planner', $payload);
+        $trip = $save? $this->storeAiTrip( $payload, $plan) : null;
+        return [
+            ...$plan ,
+            'trip' => $trip ? new TripResource($trip->load('tripPlaces.place')) : null,
+            'trip_id' => $trip?->id,
+        ];
     }
 
     private function post(string $endpoint, array $payload): array
@@ -39,4 +49,67 @@ class AiRecommendationService
             abort($exception->response?->status() ?: 502, $message);
         }
     }
+
+    private function storeAiTrip( array $payload, array $plan): Trip
+    {
+        $tourist_id  = Auth::id();
+        $summary = $plan['summary'] ?? [];
+        $planDays = $plan['days'] ?? [];
+
+        $startDate = $summary['start_date'] ?? $payload['start_date'] ?? now()->toDateString();
+        $days = $summary['days'] ?? $payload['days'] ?? 1;
+        $totalCost = $summary['total_cost'] ?? 0;
+
+        $trip = Trip::create([
+            'user_id' => $tourist_id,
+            
+            'title' => !empty($payload['title']) ? $payload['title'] : 'خطة سفر ذكية - '.$startDate,
+            'start_date' => $startDate,
+            'day_count' => $days,
+            'budget_max' => $payload['budget'] ?? null,
+            'trip_pace' => $this->mapPace($payload['pace'] ?? 'medium'),
+            'preferred_activity_level' => $this->mapActivityLevel($payload['preferred_activity_level'] ?? 2),
+            'total_estimated_cost' => $totalCost,
+            'source' => 'ai',
+            'ai_payload' => $payload,
+        ]);
+
+        foreach ($planDays as $day) {
+            $dayNumber = $day['day'] ?? 1;
+
+            foreach ($day['activities'] ?? [] as $index => $activity) {
+                TripPlace::create([
+                    'trip_id' => $trip->id,
+                    'place_id' => $activity['database_place_id'] ?? null,
+                    'day_number' => $dayNumber,
+                    'order' => $index + 1,
+                    'start_time' => $activity['start_time'] ?? '09:00',
+                    'duration_minutes' => (int) ($activity['duration'] ?? 60),
+                    'travel_minutes' => (int) ($activity['travel_time_from_previous'] ?? 0),
+                    'estimated_cost' => $activity['cost'] ?? 0,
+                    'note' => $activity['category'] ?? null,
+                ]);
+            }
+        }
+
+        return $trip;
+    }
+    private function mapPace(string $pace): string
+    {
+        return match ($pace) {
+            'slow', 'relaxed' => 'slow',
+            'intensive', 'active' => 'intensive',
+            default => 'medium',
+        };
+    }
+
+    private function mapActivityLevel(int $level): string
+    {
+        return match (true) {
+            $level <= 1 => 'relax',
+            $level >= 3 => 'vigour',
+            default => 'sensible',
+        };
+    }
+
 }

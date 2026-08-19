@@ -34,6 +34,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Internal\AiPlaceController;
+use App\Http\Controllers\Tourist\AiRecommendationController as TouristAiRecommendationController;
 use App\Http\Middleware\EnsureAiInternalToken;
 
 Route::get('/user', function (Request $request) {
@@ -139,6 +140,10 @@ Route::middleware(['auth:sanctum', 'role:tourist'])
 
         Route::get('/interests', [TouristInterestController::class, 'index']);
         Route::post('/interests', [TouristInterestController::class, 'store']);
+
+        Route::prefix('ai')->group(function () {
+        Route::post('/smart-trip-planner', [TouristAiRecommendationController::class, 'smartTripPlanner']);
+    });
     });
 
 Route::middleware('auth:sanctum')->group(function () {
