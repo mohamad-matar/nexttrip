@@ -157,6 +157,16 @@ class TripPlaceController extends Controller
         return api_success(new TripResource($trip), 'تم تحديث الرحلة بنجاح.');
     }
 
+    public function destroy(Request $request, Trip $trip)
+    {
+        abort_unless($trip->user_id === $request->user()->id, 403);
+
+        // trip_places تُحذف تلقائياً عبر cascadeOnDelete
+        $trip->delete();
+
+        return api_success(null, 'تم حذف الرحلة بنجاح.');
+    }
+
     public function updateTripPlace(Request $request, Trip $trip, TripPlace $tripPlace)
     {
         abort_unless($trip->user_id === $request->user()->id, 403);
