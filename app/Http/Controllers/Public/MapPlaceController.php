@@ -54,6 +54,6 @@ class MapPlaceController extends Controller
 
     public function show(Place $place)
     {
-        return api_success(new PlaceResource($place->load(['city', 'category', 'images', 'interests', 'reviews'])));
+        return api_success(new PlaceResource($place->load(['city', 'category', 'images', 'interests', 'reviews.user'])));
     }
 }

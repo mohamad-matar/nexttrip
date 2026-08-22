@@ -36,7 +36,13 @@ class PlaceResource extends JsonResource
             'category' => $this->whenLoaded('category'),
             'images' => PlaceImageResource::collection($this->whenLoaded('images')->sortBy('order')),
             'interests' => InterestResource::collection($this->whenLoaded('interests')),
-            'reviews' => $this->whenLoaded('reviews'),
+            'reviews' => $this->whenLoaded('reviews', fn () => $this->reviews->map(fn ($review) => [
+                'id' => $review->id,
+                'rating' => $review->rating,
+                'comment' => $review->comment,
+                'created_at' => $review->created_at?->toDateTimeString(),
+                'user' => $review->user ? ['id' => $review->user->id, 'name' => $review->user->name] : null,
+            ])),
         ];
     }
 }
