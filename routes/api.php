@@ -136,7 +136,10 @@ Route::middleware(['auth:sanctum', 'role:tourist'])
         Route::get('/trips', [TripPlaceController::class, 'trips']);
         Route::post('/trips', [TripPlaceController::class, 'createTrip']);
         Route::get('/trips/{trip}', [TripPlaceController::class, 'show']);
+        Route::put('/trips/{trip}', [TripPlaceController::class, 'updateTrip']);
         Route::post('/trips/{trip}/places', [TripPlaceController::class, 'store']);
+        Route::put('/trips/{trip}/places/{tripPlace}', [TripPlaceController::class, 'updateTripPlace']);
+        Route::delete('/trips/{trip}/places/{tripPlace}', [TripPlaceController::class, 'destroyTripPlace']);
 
         Route::get('/interests', [TouristInterestController::class, 'index']);
         Route::post('/interests', [TouristInterestController::class, 'store']);

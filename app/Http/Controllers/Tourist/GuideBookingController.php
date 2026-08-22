@@ -142,7 +142,7 @@ class GuideBookingController extends Controller
                 'booking.guide.user:id,name,email',
 
                 // بيانات الرحلة إن وجدت
-                'booking.trip:id,title,start_date,end_date'
+                'booking.trip:id,title,start_date,day_count'
             ])
             ->orderBy('created_at', 'desc')
             ->get();

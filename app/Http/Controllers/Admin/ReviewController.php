@@ -24,7 +24,7 @@ class ReviewController extends Controller
             'booking.guide:id,user_id,avatar,daily_price',
             'booking.guide.user:id,name,email',
             'booking.tourist:id,name,email',
-            'booking.trip:id,title,start_date,end_date',
+            'booking.trip:id,title,start_date,day_count',
         ]);
 
         if ($search) {
@@ -65,7 +65,7 @@ class ReviewController extends Controller
             'booking.guide:id,user_id,avatar,daily_price,bio',
             'booking.guide.user:id,name,email',
             'booking.tourist:id,name,email',
-            'booking.trip:id,title,start_date,end_date',
+            'booking.trip:id,title,start_date,day_count',
         ]);       
 
         return api_success($review);
