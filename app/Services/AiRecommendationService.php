@@ -9,6 +9,7 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class AiRecommendationService
 {   
@@ -26,6 +27,18 @@ class AiRecommendationService
             'trip' => $trip ? new TripResource($trip->load('tripPlaces.place')) : null,
             'trip_id' => $trip?->id,
         ];
+    }
+
+    public function notifyPlacesChanged(): void
+    {
+        try {
+            Http::timeout(5)
+                ->acceptJson()
+                ->post(rtrim(config('ai.base_url'), '/') . '/admin/reload-places')
+                ->throw();
+        } catch (ConnectionException|RequestException $exception) {
+            Log::warning('AI places reload failed: ' . $exception->getMessage());
+        }
     }
 
     private function post(string $endpoint, array $payload): array
@@ -76,13 +89,21 @@ class AiRecommendationService
 
         foreach ($planDays as $day) {
             $dayNumber = $day['day'] ?? 1;
+            $order = 0;
 
-            foreach ($day['activities'] ?? [] as $index => $activity) {
+            foreach ($day['activities'] ?? [] as $activity) {
+                // Only database places can be attached to a saved trip.
+                if (empty($activity['database_place_id'])) {
+                    continue;
+                }
+
+                $order++;
+
                 TripPlace::create([
                     'trip_id' => $trip->id,
-                    'place_id' => $activity['database_place_id'] ?? null,
+                    'place_id' => $activity['database_place_id'],
                     'day_number' => $dayNumber,
-                    'order' => $index + 1,
+                    'order' => $order,
                     'start_time' => $activity['start_time'] ?? '09:00',
                     'duration_minutes' => (int) ($activity['duration'] ?? 60),
                     'travel_minutes' => (int) ($activity['travel_time_from_previous'] ?? 0),

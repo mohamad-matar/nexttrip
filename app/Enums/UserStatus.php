@@ -12,7 +12,7 @@ enum UserStatus: string{
     {
         return match ($this) {
             self::Active => 'نشط',
-            self::Blocked => 'محظور',
+            self::Blocked => 'محجوب',
             self::Unavailable => 'غير متاح',
             self::Closed => 'مغلق',
         };
